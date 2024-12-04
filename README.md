@@ -1,5 +1,5 @@
 ## ALGODAT <3
-In this README.txt, there are instructions on how to push/pull or any other common git commands that u might forget :) under these, there are also a brief idea on how the project will flow throughout the weeks :) .
+In this README.md, there are instructions on how to push/pull or any other common git commands that u might forget :) under these, there are also a brief idea on how the project will flow throughout the weeks :) .
 
 ---
 
