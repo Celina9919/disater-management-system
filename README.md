@@ -122,12 +122,8 @@ Remove an old or unnecessary branch:
    ```bash
    git push -u origin main
    ```
-2. Your project will now be visible in the GitLab repository.
-
 ---
-Creating a disaster management planning tool for the city of Schilda is a structured, multi-functional project that involves careful planning and development. Below is a step-by-step guide to understanding, structuring, and implementing the project.
 
----
 
 ## **Understanding the Project**
 
