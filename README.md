@@ -164,8 +164,6 @@ The project should be modular for ease of development and testing. Here's a sugg
 - **Disaster Planning Tools:**
   - Provides algorithms for F1–F5 features.
   
-- **User Interface:**
-  - A command-line or graphical interface for interacting with the tool.
 
 ### **2. Key Files and Directories**
 ```
@@ -182,7 +180,7 @@ The project should be modular for ease of development and testing. Here's a sugg
     |-- requirements.txt     # List of dependencies (if any)
     |-- README.md            # Project description and usage instructions
 ```
-
+THIS IS SUGGESTED BY CHATGPT, COULD CHANGE LATER
 
 ## **Step-by-Step Plan **
 
