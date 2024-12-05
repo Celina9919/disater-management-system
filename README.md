@@ -59,7 +59,7 @@ The tool uses an adjacency matrix to represent the city map and integrates vario
    ```bash
    git remote add origin <repository_url>
    ```
-
+this is not necessarilz needed, but just do it for a safe step to check. If already have origin, it comes out as an error.
 ---
 
 ### Basic Git Commands
