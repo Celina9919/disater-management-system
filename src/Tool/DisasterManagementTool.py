@@ -29,7 +29,17 @@ class DisasterManagementTool:
             return
         
         
-    
+        G = nx.Graph()  #networkX creates empty graph first
+        for i, node in enumerate(self.node_labels): #loop goes through nodes, for every i it gives node labels, i acts like a pointer
+            G.add_node(node) #adds node to the graph , adding anew city location to the map
+
+        for i in range(len(self.city_map)): #loop goes through each row (each node)
+            for j in range(i + 1, len(self.city_map[i])):  # loop goes through each column --> Avoid duplicating edges(A-B, B-A)
+                if self.city_map[i][j] != 0:  # Edge(road) exists if not 0
+                    G.add_edge(self.node_labels[i], self.node_labels[j], weight=self.city_map[i][j])
+                    #adds edge(road) between 2 nodes(places) in graph
+                    #weight = distance btw places
+                    #self.city_map[i][j] = road’s distance (from adjacency matrix)
 
      
         
