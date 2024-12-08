@@ -53,5 +53,15 @@ class DisasterManagementTool:
         nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels) #draw the weights on graph
         plt.title("City Map of Schilda")
         plt.show()
+        
+    def print_adjacency_matrix(self):
+        """Print the current adjacency matrix of the city map."""
+        if self.city_map is None:
+            print("No city map loaded.")
+            return
+        print("\nCurrent Adjacency Matrix:")
+        print("   ", " ".join(self.node_labels))
+        for i, row in enumerate(self.city_map):
+            print(f"{self.node_labels[i]}  ", " ".join(map(str, row)))
 
         
