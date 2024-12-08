@@ -28,11 +28,14 @@ class DisasterManagementTool:
             print("No city map loaded.")
             return
         
+        # Create a directed graph
+        G = nx.DiGraph()  #networkX creates empty graph first
         
-        G = nx.Graph()  #networkX creates empty graph first
+        # Add nodes
         for i, node in enumerate(self.node_labels): #loop goes through nodes, for every i it gives node labels, i acts like a pointer
             G.add_node(node) #adds node to the graph , adding anew city location to the map
 
+        # Add directed edges based on the adjacency matrix
         for i in range(len(self.city_map)): #loop goes through each row (each node)
             for j in range(i + 1, len(self.city_map[i])):  # loop goes through each column --> Avoid duplicating edges(A-B, B-A)
                 if self.city_map[i][j] != 0:  # Edge(road) exists if not 0
@@ -40,17 +43,21 @@ class DisasterManagementTool:
                     #adds edge(road) between 2 nodes(places) in graph
                     #weight = distance btw places
                     #self.city_map[i][j] = road’s distance (from adjacency matrix)
-
-        pos = nx.spring_layout(G)  # the looks for the graph
-        nx.draw(G, 
+        
+        # Define graph layout and draw the graph
+        pos = nx.spring_layout(G, k=1.5, seed=42)  # the looks for the graph
+        plt.figure(figsize=(8,6), num="directed_unweighted")  # Combined figure size and title
+        
+        # Draw the graph
+        nx.draw_networkx(G, 
                 pos, 
                 with_labels=True, 
                 node_color='lightblue', 
                 edge_color='gray', 
-                node_size=1500, 
-                font_size=12) #draws graph
-        edge_labels = nx.get_edge_attributes(G, 'weight') #gets weights of edges
-        nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels) #draw the weights on graph
+                node_size=2000, 
+                font_size=12, arrows=True) #draws graph
+        
+        # Directed_unweighted graph of Schilda
         plt.title("City Map of Schilda")
         plt.show()
         

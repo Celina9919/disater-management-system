@@ -2,6 +2,7 @@ from DisasterManagementTool import DisasterManagementTool
 
 if __name__ == "__main__":
     # example input from prof
+    # Adjacency matrix of directed_uweighted graph
     adjacency_matrix = [
         [0, 1, 0, 0, 1, 0, 1, 1, 0, 1],
         [1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
@@ -15,6 +16,7 @@ if __name__ == "__main__":
         [1, 0, 0, 0, 0, 0, 0, 0, 1, 0]
     ]
 
+    # Define node labels
     node_labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
 
     # initialise
