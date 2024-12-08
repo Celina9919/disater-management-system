@@ -41,5 +41,17 @@ class DisasterManagementTool:
                     #weight = distance btw places
                     #self.city_map[i][j] = road’s distance (from adjacency matrix)
 
-     
+        pos = nx.spring_layout(G)  # the looks for the graph
+        nx.draw(G, 
+                pos, 
+                with_labels=True, 
+                node_color='lightblue', 
+                edge_color='gray', 
+                node_size=1500, 
+                font_size=12) #draws graph
+        edge_labels = nx.get_edge_attributes(G, 'weight') #gets weights of edges
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels) #draw the weights on graph
+        plt.title("City Map of Schilda")
+        plt.show()
+
         
