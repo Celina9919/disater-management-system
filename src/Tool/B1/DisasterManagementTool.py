@@ -1,0 +1,68 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import networkx as nx
+
+class DisasterManagementTool:
+    def __init__(self, graph_type="directed_unweighted"):
+        """Initialize an empty city map."""
+        self.city_map = None  # will be loaded later
+        self.node_labels = []  # store names of nodes (A,B,C)
+        self.graph_type = graph_type  # specify the graph type
+
+    def load_city_map(self, adjacency_matrix, node_labels=None):
+        """Load a city map from an adjacency matrix."""
+        self.city_map = np.array(adjacency_matrix)
+        self.node_labels = node_labels if node_labels else [chr(65 + i) for i in range(len(adjacency_matrix))]
+        print(f"{self.graph_type.capitalize()} city map loaded successfully.")
+        
+    def display_city_map(self):
+        """Display the city map as a graph using NetworkX and Matplotlib."""
+        if self.city_map is None:
+            print("No city map loaded.")
+            return
+        
+        # Initialize appropriate NetworkX graph
+        if self.graph_type in ["directed_unweighted", "directed_weighted"]:
+            G = nx.DiGraph()  # Directed graph
+        else:
+            G = nx.Graph()  # Undirected graph
+        
+        # Add nodes
+        for node in self.node_labels:
+            G.add_node(node)
+
+        # Add edges based on the adjacency matrix
+        for i in range(len(self.city_map)):
+            for j in range(len(self.city_map[i])):
+                if self.city_map[i][j] != 0:  # Only add an edge if there is a non-zero value
+                    # Check for weighted graph type
+                    if self.graph_type in ["directed_weighted", "undirected_weighted"]:
+                        G.add_edge(self.node_labels[i], self.node_labels[j], weight=self.city_map[i][j])
+                    else:
+                        G.add_edge(self.node_labels[i], self.node_labels[j])
+
+        # Define graph layout
+        pos = nx.spring_layout(G, k=2.5)
+        plt.figure(figsize=(8, 6), num=self.graph_type)
+
+        # Draw the graph
+        edge_labels = nx.get_edge_attributes(G, 'weight') if "weighted" in self.graph_type else None
+        nx.draw_networkx(G, pos, with_labels=True, node_color='lightblue', edge_color='gray',
+                         node_size=1500, font_size=12, arrows=True)
+        if edge_labels:
+            nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
+
+        # Display graph title
+        plt.title(f"City Map of Schilda ({self.graph_type.replace('_', ' ').capitalize()})")
+        plt.show()
+
+    def print_adjacency_matrix(self):
+        """Print the current adjacency matrix of the city map."""
+        if self.city_map is None:
+            print("No city map loaded.")
+            return
+        
+        print(f"\nCurrent Adjacency Matrix for {self.graph_type.capitalize()}:")
+        print("   ", " ".join(self.node_labels))
+        for i, row in enumerate(self.city_map):
+            print(f"{self.node_labels[i]}  ", " ".join(map(str, row)))
