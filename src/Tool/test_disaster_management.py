@@ -9,7 +9,7 @@ def test_graph(adjacency_matrix, graph_type):
     tool.display_city_map()  # Ensure it's called only once here
     
 
-def add_global_features(tool):
+def add_new_features(tool):
     """Adds important points, impassable roads, and road types to each graph tool."""
     
     tool.add_important_point('Supply Depot 1', 'A', distance=50)
@@ -40,7 +40,11 @@ if __name__ == "__main__":
     ]
     
     # Test the different adjacency matrices
-    test_graph(directed_unweighted_matrix, "directed_unweighted")
+    tool = DisasterManagementTool("directed_unweighted")
+    tool.load_city_map(directed_unweighted_matrix, node_labels)
+    add_new_features(tool)  
+    tool.print_adjacency_matrix()
+    tool.display_city_map()
 
     # Other matrices to test
     directed_weighted_matrix = [
@@ -84,6 +88,6 @@ if __name__ == "__main__":
     ]
     
     # Test other matrices
-    test_graph(directed_weighted_matrix, "directed_weighted")
-    test_graph(undirected_unweighted_matrix, "undirected_unweighted")
-    test_graph(undirected_weighted_matrix, "undirected_weighted")
+    #test_graph(directed_weighted_matrix, "directed_weighted")
+    #test_graph(undirected_unweighted_matrix, "undirected_unweighted")
+    #test_graph(undirected_weighted_matrix, "undirected_weighted")

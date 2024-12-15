@@ -13,22 +13,26 @@ class DisasterManagementTool:
         self.road_types = {}  # road types (land, waterway)
 
     def load_city_map(self, adjacency_matrix, node_labels=None):
-        #define method
-        #adjacency-matrix : sqaute grid for the matrix
-        #node_labels A, B, C
-
         """Load a city map from an adjacency matrix."""
         self.city_map = np.array(adjacency_matrix)
         self.node_labels = node_labels if node_labels else [chr(65 + i) for i in range(len(adjacency_matrix))]
-        #chr(65+i) creates character, 65 is A.. chr 65+1 is B
-        #IF NO NODES GIVEN, THIS FUNCTION GIVES LABELS
         print(f"{self.graph_type.capitalize()} city map loaded successfully.")
-        
-        # Add edges based on the adjacency matrix
-        for i in range(len(self.city_map)): #loop goes through each row (each node)
+    
+    # Initialize the graph here
+        if self.graph_type in ["directed_unweighted", "directed_weighted"]:
+            G = nx.DiGraph()  # Directed graph
+        else:
+            G = nx.Graph()  # Undirected graph
+
+    # Add nodes to the graph
+        for node in self.node_labels:
+            G.add_node(node)
+
+    # Add edges based on the adjacency matrix
+        for i in range(len(self.city_map)):  # Loop through each node
             for j in range(len(self.city_map[i])):
                 if self.city_map[i][j] != 0:  # Only add an edge if there is a non-zero value
-                    # Check for weighted graph type
+                # Check for weighted graph type
                     if self.graph_type in ["directed_weighted", "undirected_weighted"]:
                         G.add_edge(self.node_labels[i], self.node_labels[j], weight=self.city_map[i][j])
                     else:
@@ -36,10 +40,12 @@ class DisasterManagementTool:
 
         # Draw the graph
         edge_labels = nx.get_edge_attributes(G, 'weight') if "weighted" in self.graph_type else None
+        pos = nx.spring_layout(G, k=2.5)  # Layout for visualization
         nx.draw_networkx(G, pos, with_labels=True, node_color='lightblue', edge_color='gray',
-                         node_size=1500, font_size=12, arrows=True)
+                        node_size=1500, font_size=12, arrows=True)
         if edge_labels:
             nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
+
 
     def print_adjacency_matrix(self):
         """Print the current adjacency matrix of the city map."""
@@ -117,7 +123,7 @@ class DisasterManagementTool:
             plt.text(pos[location][0], pos[location][1] + 0.1, f'{point} ({distance}m)' if distance else point,
                      fontsize=10, fontweight='bold', color='darkred')
             
-        plt.title(f"Extended City Map of Schilda ({self.graph_type.replace('_', ' ').capitalize()})")
+        plt.title(f"City Map of Schilda ({self.graph_type.replace('_', ' ').capitalize()})")
         plt.show()
         
     
