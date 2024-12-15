@@ -89,4 +89,13 @@ class DisasterManagementTool:
             self.impassable_roads.append((start, end)) #add & store in self (initialised earlier)
             print(f"Road from {start} to {end} marked as impassable.")
             
+    def add_road_type(self, start, end, road_type): # star & end = nodes , road_type = waterway/land
+        """Specify whether a road between two points is a 'land route' or 'waterway'."""
+        if road_type not in ['land', 'waterway']:
+            print(f"Invalid road type. Must be 'land' or 'waterway'.")
+            return
+        self.road_types[(start, end)] = road_type #store in DICTIONARY (initialised earlier) 
+        # key : start, end
+        print(f"Road from {start} to {end} set as {road_type}.")
+            
     
