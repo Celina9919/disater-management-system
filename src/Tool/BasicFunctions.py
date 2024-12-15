@@ -8,7 +8,7 @@ class DisasterManagementTool:
         self.city_map = None  # will be loaded later
         self.node_labels = []  # store names of nodes (A,B,C)
         self.graph_type = graph_type  # specify the graph type
-        self.important_points = {}  # store important points and distance to intersections
+        self.important_points = {}  # store important points and distance to intersections using DICTIONARY
         self.impassable_roads = []  # array list of impassable roads
         self.road_types = {}  # road types (land, waterway)
 
@@ -75,3 +75,10 @@ class DisasterManagementTool:
         print("   ", " ".join(self.node_labels))
         for i, row in enumerate(self.city_map):
             print(f"{self.node_labels[i]}  ", " ".join(map(str, row)))
+
+###########B2 FUNCTIONS STARTS HERE############
+    def add_important_point(self, name, location, distance=None):  # name : hospital, location : node (e.g. A,B), distance : any value
+        """Add important point at location, which may not be an existing intersection."""
+        self.important_points[name] = (location, distance)  # call dictionary that initialised earlier
+        # why use DICTIONARY : can store name as key, location & distance as a tuple
+        print(f"Important point '{name}' added at location '{location}' with distance {distance} to nearest intersection.") 
