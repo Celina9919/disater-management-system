@@ -24,22 +24,6 @@ class DisasterManagementTool:
         #IF NO NODES GIVEN, THIS FUNCTION GIVES LABELS
         print(f"{self.graph_type.capitalize()} city map loaded successfully.")
         
-    def display_city_map(self):
-        """Display the city map as a graph using NetworkX and Matplotlib."""
-        if self.city_map is None:
-            print("No city map loaded.")
-            return
-        
-        # Initialize appropriate NetworkX graph
-        if self.graph_type in ["directed_unweighted", "directed_weighted"]:
-            G = nx.DiGraph()  # Directed graph
-        else:
-            G = nx.Graph()  # Undirected graph
-        
-        # Add nodes
-        for node in self.node_labels: #loop goes through each row (each node)
-            G.add_node(node) #adds node to the graph , adding anew city location to the map
-
         # Add edges based on the adjacency matrix
         for i in range(len(self.city_map)): #loop goes through each row (each node)
             for j in range(len(self.city_map[i])):
@@ -50,20 +34,12 @@ class DisasterManagementTool:
                     else:
                         G.add_edge(self.node_labels[i], self.node_labels[j])
 
-        # Define graph layout
-        pos = nx.spring_layout(G, k=2.5) #the looks for teh graph
-        plt.figure(figsize=(8, 6), num=self.graph_type) #Combine figure size and title
-
         # Draw the graph
         edge_labels = nx.get_edge_attributes(G, 'weight') if "weighted" in self.graph_type else None
         nx.draw_networkx(G, pos, with_labels=True, node_color='lightblue', edge_color='gray',
                          node_size=1500, font_size=12, arrows=True)
         if edge_labels:
             nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
-
-        # Display graph title
-        plt.title(f"City Map of Schilda ({self.graph_type.replace('_', ' ').capitalize()})")
-        plt.show()
 
     def print_adjacency_matrix(self):
         """Print the current adjacency matrix of the city map."""
@@ -97,5 +73,51 @@ class DisasterManagementTool:
         self.road_types[(start, end)] = road_type #store in DICTIONARY (initialised earlier) 
         # key : start, end
         print(f"Road from {start} to {end} set as {road_type}.")
+        
+########GRAPH DISPLAYING##########
             
+    def display_city_map(self):
+        """display the city map as a graph with additional features that are just added"""
+        if self.city_map is None:
+            print("No city map loaded.")
+            return
+        
+    # Initialize appropriate NetworkX graph
+        if self.graph_type in ["directed_unweighted", "directed_weighted"]:
+            G = nx.DiGraph()  # Directed graph
+        else:
+            G = nx.Graph()  # Undirected graph
+            
+    # Add nodes
+        for node in self.node_labels: #loop goes through each row (each node)
+            G.add_node(node) #adds node to the graph , adding anew city location to the map
+            
+        for i in range(len(self.city_map)):
+                for j in range(len(self.city_map[i])):
+                    if self.city_map[i][j] != 0 and (self.node_labels[i], self.node_labels[j]) not in self.impassable_roads:
+                        G.add_edge(self.node_labels[i], self.node_labels[j])
+                        
+        # Define graph layout
+        pos = nx.spring_layout(G, k=2.5) #the looks for teh graph
+        plt.figure(figsize=(8, 6), num=self.graph_type) #Combine figure size and title
+        
+        edge_colors = []  #set roads/edges colours to differentiate
+        for u, v in G.edges():
+            if (u, v) in self.impassable_roads:
+                edge_colors.append('red')  # impassable : red
+            elif self.road_types.get((u, v)) == 'waterway':
+                edge_colors.append('blue')  # waterways : blue
+            else:
+                edge_colors.append('gray')  # normal : gray
+
+        nx.draw_networkx(G, pos, with_labels=True, node_color='lightblue', edge_color=edge_colors,
+                         node_size=1500, font_size=12, arrows=True)
+        
+        for point, (location, distance) in self.important_points.items():
+            plt.text(pos[location][0], pos[location][1] + 0.1, f'{point} ({distance}m)' if distance else point,
+                     fontsize=10, fontweight='bold', color='darkred')
+            
+        plt.title(f"Extended City Map of Schilda ({self.graph_type.replace('_', ' ').capitalize()})")
+        plt.show()
+        
     

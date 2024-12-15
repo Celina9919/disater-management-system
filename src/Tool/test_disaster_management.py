@@ -7,6 +7,20 @@ def test_graph(adjacency_matrix, graph_type):
     tool.load_city_map(adjacency_matrix, node_labels)
     tool.print_adjacency_matrix()
     tool.display_city_map()  # Ensure it's called only once here
+    
+
+def add_global_features(tool):
+    """Adds important points, impassable roads, and road types to each graph tool."""
+    
+    tool.add_important_point('Supply Depot 1', 'A', distance=50)
+    tool.add_important_point('Evacuation Point', 'C')
+    
+    tool.mark_road_impassable('A', 'B')
+
+    tool.add_road_type('C', 'D', 'waterway')
+
+
+###############################
 
 if __name__ == "__main__":
     # Example input from prof
