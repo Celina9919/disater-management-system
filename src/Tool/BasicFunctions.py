@@ -82,3 +82,11 @@ class DisasterManagementTool:
         self.important_points[name] = (location, distance)  # call dictionary that initialised earlier
         # why use DICTIONARY : can store name as key, location & distance as a tuple
         print(f"Important point '{name}' added at location '{location}' with distance {distance} to nearest intersection.") 
+
+    def mark_road_impassable(self, start, end):   #start & end points = nodes
+        """Mark a road between start and end as impassable."""
+        if (start, end) not in self.impassable_roads: #check alrd marked or not
+            self.impassable_roads.append((start, end)) #add & store in self (initialised earlier)
+            print(f"Road from {start} to {end} marked as impassable.")
+            
+    
