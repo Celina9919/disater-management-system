@@ -8,6 +8,9 @@ class DisasterManagementTool:
         self.city_map = None  # will be loaded later
         self.node_labels = []  # store names of nodes (A,B,C)
         self.graph_type = graph_type  # specify the graph type
+        self.important_points = {}  # store important points and distance to intersections
+        self.impassable_roads = []  # array list of impassable roads
+        self.road_types = {}  # road types (land, waterway)
 
     def load_city_map(self, adjacency_matrix, node_labels=None):
         #define method
