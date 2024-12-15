@@ -1,4 +1,4 @@
-from DisasterManagementTool import DisasterManagementTool
+from BasicFunctions import DisasterManagementTool
 
 node_labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
 
