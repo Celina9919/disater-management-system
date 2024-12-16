@@ -18,17 +18,17 @@ class DisasterManagementTool:
         self.node_labels = node_labels if node_labels else [chr(65 + i) for i in range(len(adjacency_matrix))]
         print(f"{self.graph_type.capitalize()} city map loaded successfully.")
     
-    # Initialize the graph here
+    # initialize  graph here
         if self.graph_type in ["directed_unweighted", "directed_weighted"]:
             G = nx.DiGraph()  # Directed graph
         else:
             G = nx.Graph()  # Undirected graph
 
-    # Add nodes to the graph
+    # add nodes to the graph
         for node in self.node_labels:
             G.add_node(node)
 
-    # Add edges based on the adjacency matrix
+    # add edges based adjacency matrix
         for i in range(len(self.city_map)):  # Loop through each node
             for j in range(len(self.city_map[i])):
                 if self.city_map[i][j] != 0:  # Only add an edge if there is a non-zero value
@@ -38,7 +38,7 @@ class DisasterManagementTool:
                     else:
                         G.add_edge(self.node_labels[i], self.node_labels[j])
 
-        # Draw the graph
+        # draw
         edge_labels = nx.get_edge_attributes(G, 'weight') if "weighted" in self.graph_type else None
         pos = nx.spring_layout(G, k=2.5)  # Layout for visualization
         nx.draw_networkx(G, pos, with_labels=True, node_color='lightblue', edge_color='gray',
@@ -88,13 +88,13 @@ class DisasterManagementTool:
             print("No city map loaded.")
             return
         
-    # Initialize appropriate NetworkX graph
+    # initialize graph
         if self.graph_type in ["directed_unweighted", "directed_weighted"]:
             G = nx.DiGraph()  # Directed graph
         else:
             G = nx.Graph()  # Undirected graph
             
-    # Add nodes
+    # add nodes
         for node in self.node_labels: #loop goes through each row (each node)
             G.add_node(node) #adds node to the graph , adding anew city location to the map
             
@@ -103,9 +103,9 @@ class DisasterManagementTool:
                     if self.city_map[i][j] != 0 and (self.node_labels[i], self.node_labels[j]) not in self.impassable_roads:
                         G.add_edge(self.node_labels[i], self.node_labels[j])
                         
-        # Define graph layout
+        # graph layout
         pos = nx.spring_layout(G, k=2.5) #the looks for teh graph
-        plt.figure(figsize=(8, 6), num=self.graph_type) #Combine figure size and title
+        plt.figure(figsize=(8, 6), num=self.graph_type) #combine figure size and title
         
         edge_colors = []  #set roads/edges colours to differentiate
         for u, v in G.edges():

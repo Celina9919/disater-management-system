@@ -6,7 +6,7 @@ def test_graph(adjacency_matrix, graph_type):
     tool = DisasterManagementTool(graph_type)
     tool.load_city_map(adjacency_matrix, node_labels)
     tool.print_adjacency_matrix()
-    tool.display_city_map()  # Ensure it's called only once here
+    tool.display_city_map()  # ensure called only once here
     
 
 def add_new_features(tool):
@@ -88,6 +88,6 @@ if __name__ == "__main__":
     ]
     
     # Test other matrices
-    #test_graph(directed_weighted_matrix, "directed_weighted")
+    test_graph(directed_weighted_matrix, "directed_weighted")
     #test_graph(undirected_unweighted_matrix, "undirected_unweighted")
     #test_graph(undirected_weighted_matrix, "undirected_weighted")
