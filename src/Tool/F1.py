@@ -1,5 +1,5 @@
 """
-In the first functions, there are two ways to calculate the minimum rebuilding cost for Schilda city: Prim Algorithm and Kruskal Algorithm.
+In the first function, there are two ways to calculate the minimum rebuilding cost for Schilda city: Prim Algorithm and Kruskal Algorithm.
 Both of them work with MST - Minimum Spanning Tree, which is a subgraph of a graph that satisfies specific properties.
 At the end,  both algorithms deliver the same minimum cost to rebuild the infrastructure of Schilda city.
 Prim Algorithm is served for the dense graph whereas the Kruskal Algorithm is for the sparse graph. However, in this case, the data used is a dense graph.
