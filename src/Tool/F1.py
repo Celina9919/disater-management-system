@@ -4,6 +4,16 @@ Both of them work with MST - Minimum Spanning Tree, which is a subgraph of a gra
 At the end,  both algorithms deliver the same minimum cost to rebuild the infrastructure of Schilda city.
 Prim Algorithm is served for the dense graph whereas the Kruskal Algorithm is for the sparse graph. However, in this case, the data used is a dense graph.
 Hence, the Prim Algorithm is the most appropriate algorithm for this case.
+Infrastructure of Schilda City:
+- A: Hospital
+- B: Rescue Station
+- C: Government Building
+- D: Evacuation Point to gather people
+- E: Boat Rescue
+- F: Emergency Service
+- G: Supply Point
+- H, I: Staging Area
+- EI: Waterway
 """
 import pandas as pd
 import networkx as nx
@@ -30,8 +40,31 @@ for i, row in adjacency_matrix.iterrows():
         if weight > 0 and i != j:  # Ignore zero weights and self-loops
             G.add_edge(i, j, weight=weight)
 
+# Adding attributes to nodes
+node_attributes = {
+    'A': "Hospital",
+    'B': "Rescue Station",
+    'C': "Government Building",
+    'D': "Evacuation Point",
+    'E': "Boat Rescue",
+    'F': "Emergency Service",
+    'G': "Supply Point",
+    'H': "Staging Area",
+    'I': "Staging Area"
+}
+nx.set_node_attributes(G, node_attributes, "description")
+
+# Adding attributes to edges
+for u, v in G.edges():
+    if ('E' in {u, v}) and ('I' in {u, v}):
+        G.edges[u, v]["type"] = "Waterway"
+        G.edges[u, v]["color"] = "blue"
+    else:
+        G.edges[u, v]["color"] = "lightgray"
+        G.edges[u, v]["type"] = " "
+
 # Use Prim's algorithm to find the MST
-#The Min-Heap is not explicitly coded in the provided exercise because the NetworkX library abstracts the implementation of Prim's Algorithm, including the use of a Min-Heap.
+# The Min-Heap is not explicitly coded in the provided exercise because the NetworkX library abstracts the implementation of Prim's Algorithm, including the use of a Min-Heap.
 mst = nx.minimum_spanning_tree(G, algorithm="prim")
 
 # Calculate the total weight (minimum cost) of the MST
@@ -49,23 +82,29 @@ mst.edges(data=True):
 
 print(f"The minimum cost to rebuild the infrastructure of Schilda city is: {minimum_cost}")
 
-# Visualize the MST
+# Generate labels for nodes
+node_labels = {node: f"{node}: {data['description']}" for node, data in G.nodes(data=True)}
+
+# Generate labels for edges
+edge_labels = {(u, v): f"{data['type']} ({data.get('weight', 0)})" for u, v, data in G.edges(data=True)}
+
+# Visualization
 pos = nx.spring_layout(G, seed=42)  # Layout for consistent visualization
 plt.figure(figsize=(12, 12))
 
-# Draw the original graph in light gray
-nx.draw_networkx_edges(G, pos, edge_color="lightgray", alpha=0.5)
-
-# Highlight the MST edges
-nx.draw_networkx_edges(mst, pos, edge_color="red", width=2)
-
-# Draw nodes and labels
+# Draw all nodes
 nx.draw_networkx_nodes(G, pos, node_size=700, node_color="rosybrown")
-nx.draw_networkx_labels(G, pos, font_size=20, font_color="navy", font_family="monospace", font_weight="bold")
+nx.draw_networkx_labels(G, pos, labels=node_labels, font_size=8, font_color="navy", font_weight="bold", font_family="monospace")
 
-# Add edge weight labels for MST
-mst_edge_labels = {(u, v): f"{d['weight']}" for u, v, d in mst.edges(data=True)}
-nx.draw_networkx_edge_labels(mst, pos, edge_labels=mst_edge_labels, font_color="red")
+# Draw all edges with their respective colors
+edge_colors = [data["color"] for _, _, data in G.edges(data=True)]
+nx.draw_networkx_edges(G, pos, edge_color=edge_colors, width=1)
+
+# Draw MST edges on top to highlight them
+nx.draw_networkx_edges(mst, pos, edge_color="red", width=3)
+
+# Add edge labels for the attributes
+nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=6, font_color="black", font_family="monospace")
 
 plt.title("Minimum Cost of Rebuilding Infrastructure of Schilda City")
 plt.show()
@@ -79,4 +118,5 @@ As E>V in complete graphs, the overall complexity simplifies to: O(ElogV)
 In this case, V=9, E=36 (Complete graph) <= (9*(9-1))/2 = 36.
 Complexity: O(36log9)=O(36*3)=O(108)
 """
+
 #References: https://www.geeksforgeeks.org/difference-between-prims-and-kruskals-algorithm-for-mst/
