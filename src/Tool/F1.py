@@ -28,7 +28,7 @@ It grows the MST incrementally by adding the smallest edge that connects a verte
 # A Min Heap is a complete binary tree in which the value in each internal node is smaller than or equal to the values in the children of that node.
 
 # Load the adjacency matrix from the provided file
-file_path = 'D:/Programming Java/algodata/src/Data/undirected_weighted_graph.txt'
+file_path = 'src/Data/undirected_weighted_graph.txt'
 adjacency_matrix = pd.read_csv(file_path, delim_whitespace=True, index_col=0)
 
 # Create a graph from the adjacency matrix
