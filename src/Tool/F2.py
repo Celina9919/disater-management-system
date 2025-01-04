@@ -60,14 +60,15 @@ def evacuation_routes_dijkstra(evacuation_points, shelters, G):
                 path_length = nx.dijkstra_path_length(G, source=evac_point, target=shelter, weight='weight')
                 path = nx.dijkstra_path(G, source=evac_point, target=shelter, weight='weight')
                 
-                # total capacity along the path (sum of capacities of all edges in the path)
-                total_capacity = sum(G[u][v]['capacity'] for u, v in zip(path[:-1], path[1:]))
+                # edge capacities for route
+                capacities = [G[u][v]['capacity'] for u, v in zip(path[:-1], path[1:])]
+                min_capacity = min(capacities) if capacities else 0  # minimum capacity along the path
                 
                 # number of trips to evacuate all people
                 people_to_evacuate = evacuation_needs.get(evac_point, 0)
-                trips_needed = people_to_evacuate / total_capacity
-                
-                shortest_paths[shelter] = (path, path_length)
+                trips_needed = (people_to_evacuate / min_capacity) if min_capacity > 0 else float('inf')
+
+                shortest_paths[shelter] = (path, path_length, min_capacity, trips_needed)
                 
             except nx.NetworkXNoPath:
                 shortest_paths[shelter] = ("No path", float('inf'))  # no path from one node to the other!!
@@ -105,6 +106,9 @@ def save_evacuation_plans_to_csv(evacuation_plans, filename='evacuation_plans.cs
     
     # Save evacuation plans to a CSV file
 save_evacuation_plans_to_csv(evacuation_plans, 'evacuation_plans.csv')
+
+
+
 
 
 def visualize_evacuations(evacuation_plans, G):
