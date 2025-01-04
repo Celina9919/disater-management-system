@@ -54,6 +54,9 @@ def evacuation_routes_dijkstra(evacuation_points, shelters, G):
 
     return evacuation_plans
 
+evacuation_points = ['D']  
+shelters = ['A', 'B', 'C', 'G', 'H', 'I']  
+
 
 def visualize_evacuations(evacuation_plans, G):
     pos = nx.spring_layout(G, seed=42) 
