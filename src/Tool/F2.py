@@ -84,32 +84,33 @@ evacuation_plans = evacuation_routes_dijkstra(evacuation_needs.keys(), shelters,
 # evacuation routes and their lengths 4 each evacuation point
 for evac_point, routes in evacuation_plans.items():
     print(f"Evacuation Routes from {evac_point}:")
-    for shelter, (path, length) in routes.items():
-        print(f"  To Shelter {shelter}: Path = {path}, Length = {length}")
+    for shelter, (path, length, capacity, trips_needed) in routes.items():
+        print(f"  To Shelter {shelter}: Path = {path}, Length = {length}, Capacity = {capacity}, Trips Needed = {trips_needed}")
+
         
         
 #SAVING TO CSV FILE        
 def save_evacuation_plans_to_csv(evacuation_plans, filename='evacuation_plans.csv'):
     data = []
     for evac_point, routes in evacuation_plans.items():
-        for shelter, (path, length) in routes.items():
-            # Flatten the path list to a string (e.g., 'D -> B -> A')
-            path_str = ' -> '.join(path) if isinstance(path, list) else path
-            data.append([evac_point, shelter, path_str, length])
-    
-    # Convert data to a DataFrame
-    df = pd.DataFrame(data, columns=['Evacuation Point', 'Shelter', 'Path', 'Path Length'])
-    
-    # Save the DataFrame to a CSV file
+        for shelter, route_data in routes.items():
+            if isinstance(route_data, tuple) and len(route_data) == 4: 
+                path, length, capacity, trips_needed = route_data
+                path_str = ' -> '.join(path) if isinstance(path, list) else path
+            else:
+                path_str = route_data[0]  # invalid path : "No path" 
+                length = float('inf')
+                capacity = 0
+                trips_needed = float('inf')
+                
+            data.append([evac_point, shelter, path_str, length, capacity, trips_needed])
+
+    df = pd.DataFrame(data, columns=['Evacuation Point', 'Shelter', 'Path', 'Path Length', 'Capacity', 'Trips Needed'])
     df.to_csv(filename, index=False)
-    print(f"Evacuation plans have been saved to {filename}")
-    
-    # Save evacuation plans to a CSV file
-save_evacuation_plans_to_csv(evacuation_plans, 'evacuation_plans.csv')
+    print(f"Evacuation plans with capacity and trips needed have been saved to {filename}")
 
 
-
-
+save_evacuation_plans_to_csv(evacuation_plans)
 
 def visualize_evacuations(evacuation_plans, G):
     pos = nx.spring_layout(G, seed=42) 
@@ -124,7 +125,7 @@ def visualize_evacuations(evacuation_plans, G):
 
     # evacuation paths in pink
     for evac_point, routes in evacuation_plans.items():
-        for shelter, (path, _) in routes.items():
+        for shelter, (path, _, _, _) in routes.items():
             edge_list = list(zip(path[:-1], path[1:]))
             nx.draw_networkx_edges(G, pos, edgelist=edge_list, edge_color='pink', width=2)
             
