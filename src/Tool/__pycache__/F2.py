@@ -33,6 +33,27 @@ for u, v in G.edges():
         G.edges[u, v]["color"] = "lightgray"
         G.edges[u, v]["type"] = " "
 
+# DJIKSTRA FUNCTION
+def evacuation_routes_dijkstra(evacuation_points, shelters, G):
+    # dict : shortest route n lengths
+    evacuation_plans = {}
+
+    # for EACH evacuation point
+    for evac_point in evacuation_points:
+        ###### DJIKSTRA ALGO
+        shortest_paths = {}
+        for shelter in shelters:
+            try:
+                path_length = nx.dijkstra_path_length(G, source=evac_point, target=shelter, weight='weight')
+                path = nx.dijkstra_path(G, source=evac_point, target=shelter, weight='weight')
+                shortest_paths[shelter] = (path, path_length)
+            except nx.NetworkXNoPath:
+                shortest_paths[shelter] = ("No path", float('inf'))  # no path from one node to the other!!
+        
+        evacuation_plans[evac_point] = shortest_paths
+
+    return evacuation_plans
+
 
 def visualize_evacuations(evacuation_plans, G):
     pos = nx.spring_layout(G, seed=42) 
