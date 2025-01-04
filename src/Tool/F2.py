@@ -89,7 +89,7 @@ save_evacuation_plans_to_csv(evacuation_plans, 'evacuation_plans.csv')
 
 def visualize_evacuations(evacuation_plans, G):
     pos = nx.spring_layout(G, seed=42) 
-    plt.figure(figsize=(12, 12))
+    plt.figure(figsize=(10, 10))
     
     node_labels = {node: f"{node}: {data['description']}" for node, data in G.nodes(data=True)}
     edge_labels = {(u, v): f"{data['type']} ({data.get('weight', 0)})" for u, v, data in G.edges(data=True)}
