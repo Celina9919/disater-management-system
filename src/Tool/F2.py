@@ -54,6 +54,7 @@ def evacuation_routes_dijkstra(evacuation_points, shelters, G):
 
     return evacuation_plans
 
+
 evacuation_points = ['D']  
 shelters = ['A', 'B', 'C', 'G', 'H', 'I']  
 
@@ -65,6 +66,25 @@ for evac_point, routes in evacuation_plans.items():
     print(f"Evacuation Routes from {evac_point}:")
     for shelter, (path, length) in routes.items():
         print(f"  To Shelter {shelter}: Path = {path}, Length = {length}")
+        
+def save_evacuation_plans_to_csv(evacuation_plans, filename='evacuation_plans.csv'):
+    # Prepare data for CSV
+    data = []
+    for evac_point, routes in evacuation_plans.items():
+        for shelter, (path, length) in routes.items():
+            # Flatten the path list to a string (e.g., 'D -> B -> A')
+            path_str = ' -> '.join(path) if isinstance(path, list) else path
+            data.append([evac_point, shelter, path_str, length])
+    
+    # Convert data to a DataFrame
+    df = pd.DataFrame(data, columns=['Evacuation Point', 'Shelter', 'Path', 'Path Length'])
+    
+    # Save the DataFrame to a CSV file
+    df.to_csv(filename, index=False)
+    print(f"Evacuation plans have been saved to {filename}")
+    
+    # Save evacuation plans to a CSV file
+save_evacuation_plans_to_csv(evacuation_plans, 'evacuation_plans.csv')
 
 
 def visualize_evacuations(evacuation_plans, G):
@@ -109,26 +129,6 @@ def visualize_evacuations(evacuation_plans, G):
     
 visualize_evacuations(evacuation_plans, G)
 
-import pandas as pd
-
-def save_evacuation_plans_to_csv(evacuation_plans, filename='evacuation_plans.csv'):
-    # Prepare data for CSV
-    data = []
-    for evac_point, routes in evacuation_plans.items():
-        for shelter, (path, length) in routes.items():
-            # Flatten the path list to a string (e.g., 'D -> B -> A')
-            path_str = ' -> '.join(path) if isinstance(path, list) else path
-            data.append([evac_point, shelter, path_str, length])
-    
-    # Convert data to a DataFrame
-    df = pd.DataFrame(data, columns=['Evacuation Point', 'Shelter', 'Path', 'Path Length'])
-    
-    # Save the DataFrame to a CSV file
-    df.to_csv(filename, index=False)
-    print(f"Evacuation plans have been saved to {filename}")
-    
-    # Save evacuation plans to a CSV file
-save_evacuation_plans_to_csv(evacuation_plans, 'evacuation_plans.csv')
 
 
 

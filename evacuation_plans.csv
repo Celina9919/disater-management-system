@@ -1,0 +1,7 @@
+Evacuation Point,Shelter,Path,Path Length
+D,A,D -> A,7
+D,B,D -> G -> B,13
+D,C,D -> A -> C,12
+D,G,D -> G,9
+D,H,D -> A -> H,13
+D,I,D -> I,7
