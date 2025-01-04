@@ -15,9 +15,9 @@ def add_new_features(tool):
     tool.add_important_point('Supply Depot 1', 'A', distance=50)
     tool.add_important_point('Evacuation Point', 'C')
     
-    tool.mark_road_impassable('A', 'B')
+    tool.mark_road_impassable('B', 'C')
 
-    tool.add_road_type('C', 'D', 'waterway')
+    tool.add_road_type('E', 'I', 'waterway')
 
 
 ###############################
@@ -49,16 +49,15 @@ if __name__ == "__main__":
     # Other matrices to test
     directed_weighted_matrix = [
         #A, B, C, D, E, F, G, H, I, J
-        [5, 1, 0, 1, 1, 0, 5, 25, 0, 17],   # A
-        [15, 8, 4, 0, 1, 10, 0, 0, 0, 34],  # B
-        [15, 0, 5, 1, 7, 0, 9, 1, 0, 0],    # C
-        [6, 4, 1, 0, 1, 0, 0, 0, 0, 0],     # D
-        [0, 1, 9, 0, 0, 10, 0, 0, 0, 0],    # E
-        [0, 3, 0, 0, 5, 0, 0, 0, 0, 12],    # F
-        [2, 3, 9, 0, 0, 0, 0, 7, 10, 0],    # G
-        [8, 6, 15, 2, 2, 0, 0, 0, 0, 0],    # H
-        [0, 13, 0, 0, 0, 0, 17, 34, 3, 0],  # I
-        [9, 0, 3, 0, 0, 0, 0, 0, 23, 0]     # J
+        [0, 20, 5, 7, 7, 15, 25, 6, 23],   # A
+        [20, 0, 34, 25, 15, 10, 4, 7, 16], # B
+        [5, 34, 0, 20, 27, 10, 8, 12, 15], # C
+        [7, 25, 20, 0, 3, 8, 9, 20, 7],    # D
+        [7, 15, 27, 3, 0, 27, 23, 25, 0],  # E
+        [15, 10, 10, 8, 27, 0, 3, 7, 21],  # F
+        [25, 4, 8, 9, 23, 3, 0, 17, 6],    # G
+        [6, 7, 12, 20, 25, 7, 17, 0, 30],  # H
+        [23, 16, 15, 7, 5, 21, 6, 30, 0]   # I
     ]
     undirected_unweighted_matrix = [
         #A, B, C, D, E, F, G, H, I, J
