@@ -7,10 +7,14 @@ adjacency_matrix = pd.read_csv(file_path, delim_whitespace=True, index_col=0)
 
 G = nx.Graph()
 
+# same but + capacities for infrastructure (e.g., buses, boats)
 for i, row in adjacency_matrix.iterrows():
     for j, weight in row.items():
         if weight > 0 and i != j:  # ignore 0s n self-loops
-            G.add_edge(i, j, weight=weight)
+            # Here : assume a capacity for each edge (example: 100 people per hour)
+            # eg : road capacities, bus capacities, or boat capacities
+            capacity = 100  # set default capacity, can be adjusted for each edge if needed
+            G.add_edge(i, j, weight=weight, capacity=capacity)
 
 node_attributes = {
     'A': "Hospital",
@@ -24,6 +28,13 @@ node_attributes = {
     'I': "Staging Area"
 }
 nx.set_node_attributes(G, node_attributes, "description")
+
+####### NUM OF PPL NEED TO EVACUATE
+evacuation_needs = {
+    'D': 500,  # Evacuation D : 500 people to evacuate
+}
+
+shelters = ['A', 'B', 'C', 'G', 'H', 'I']  
 
 for u, v in G.edges():
     if ('E' in {u, v}) and ('I' in {u, v}):
@@ -54,9 +65,6 @@ def evacuation_routes_dijkstra(evacuation_points, shelters, G):
 
     return evacuation_plans
 
-
-evacuation_points = ['D']  
-shelters = ['A', 'B', 'C', 'G', 'H', 'I']  
 
 # evacuation_routes function = calculate the evacuation plans
 evacuation_plans = evacuation_routes_dijkstra(evacuation_points, shelters, G)
