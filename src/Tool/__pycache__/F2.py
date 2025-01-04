@@ -57,6 +57,15 @@ def evacuation_routes_dijkstra(evacuation_points, shelters, G):
 evacuation_points = ['D']  
 shelters = ['A', 'B', 'C', 'G', 'H', 'I']  
 
+# evacuation_routes function = calculate the evacuation plans
+evacuation_plans = evacuation_routes_dijkstra(evacuation_points, shelters, G)
+
+# evacuation routes and their lengths 4 each evacuation point
+for evac_point, routes in evacuation_plans.items():
+    print(f"Evacuation Routes from {evac_point}:")
+    for shelter, (path, length) in routes.items():
+        print(f"  To Shelter {shelter}: Path = {path}, Length = {length}")
+
 
 def visualize_evacuations(evacuation_plans, G):
     pos = nx.spring_layout(G, seed=42) 
