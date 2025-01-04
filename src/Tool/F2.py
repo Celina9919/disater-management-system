@@ -36,6 +36,8 @@ evacuation_needs = {
 
 shelters = ['A', 'B', 'C', 'G', 'H', 'I']  
 
+
+
 for u, v in G.edges():
     if ('E' in {u, v}) and ('I' in {u, v}):
         G.edges[u, v]["type"] = "Waterway"
@@ -57,7 +59,16 @@ def evacuation_routes_dijkstra(evacuation_points, shelters, G):
             try:
                 path_length = nx.dijkstra_path_length(G, source=evac_point, target=shelter, weight='weight')
                 path = nx.dijkstra_path(G, source=evac_point, target=shelter, weight='weight')
+                
+                # total capacity along the path (sum of capacities of all edges in the path)
+                total_capacity = sum(G[u][v]['capacity'] for u, v in zip(path[:-1], path[1:]))
+                
+                # number of trips to evacuate all people
+                people_to_evacuate = evacuation_needs.get(evac_point, 0)
+                trips_needed = people_to_evacuate / total_capacity
+                
                 shortest_paths[shelter] = (path, path_length)
+                
             except nx.NetworkXNoPath:
                 shortest_paths[shelter] = ("No path", float('inf'))  # no path from one node to the other!!
         
@@ -67,7 +78,7 @@ def evacuation_routes_dijkstra(evacuation_points, shelters, G):
 
 
 # evacuation_routes function = calculate the evacuation plans
-evacuation_plans = evacuation_routes_dijkstra(evacuation_points, shelters, G)
+evacuation_plans = evacuation_routes_dijkstra(evacuation_needs.keys(), shelters, G)
 
 # evacuation routes and their lengths 4 each evacuation point
 for evac_point, routes in evacuation_plans.items():
@@ -75,8 +86,9 @@ for evac_point, routes in evacuation_plans.items():
     for shelter, (path, length) in routes.items():
         print(f"  To Shelter {shelter}: Path = {path}, Length = {length}")
         
+        
+#SAVING TO CSV FILE        
 def save_evacuation_plans_to_csv(evacuation_plans, filename='evacuation_plans.csv'):
-    # Prepare data for CSV
     data = []
     for evac_point, routes in evacuation_plans.items():
         for shelter, (path, length) in routes.items():
