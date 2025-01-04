@@ -87,6 +87,15 @@ def visualize_evacuations(evacuation_plans, G):
     edge_labels = nx.get_edge_attributes(G, 'weight')
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=8, font_color="black", font_family="monospace")
     
+    # labelling waterway 
+    edge_labels = {}
+    for u, v, data in G.edges(data=True):
+        label = data['type']
+        if label == "Waterway":
+            edge_labels[(u, v)] = f"Waterway ({data['weight']})"
+        else:
+            edge_labels[(u, v)] = f"{data.get('weight', 0)}"  
+    
 
     #  all edges with their respective colors
     edge_colors = [data["color"] for _, _, data in G.edges(data=True)]
