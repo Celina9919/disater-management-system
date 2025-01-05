@@ -1,0 +1,350 @@
+Index: src/Data/graph_directed_unweighted.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Data/graph_directed_unweighted.txt b/src/Data/graph_directed_unweighted.txt
+new file mode 100644
+--- /dev/null	(date 1734341355385)
++++ b/src/Data/graph_directed_unweighted.txt	(date 1734341355385)
+@@ -0,0 +1,13 @@
++  A B C D E F G H I J
++A 0 1 0 0 1 0 1 1 0 1
++B 1 0 0 0 1 0 0 0 0 0
++C 1 0 0 1 0 0 1 1 0 0
++D 1 0 1 0 1 0 0 0 0 0
++E 0 1 0 0 1 1 0 0 0 0
++F 0 1 0 0 1 0 0 0 0 1 
++G 1 1 1 0 0 0 0 1 1 0
++H 0 0 0 1 1 0 0 0 0 0
++I 0 0 0 0 0 0 1 1 1 0
++J 1 0 0 0 0 0 0 0 1 0
++
++
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+new file mode 100644
+--- /dev/null	(date 1734296778417)
++++ b/.idea/misc.xml	(date 1734296778417)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_23" default="true" project-jdk-name="azul-23" project-jdk-type="JavaSDK">
++    <output url="file://$PROJECT_DIR$/out" />
++  </component>
++</project>
+\ No newline at end of file
+Index: src/Tool/test_disaster_management.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from BasicFunctions import DisasterManagementTool\r\n\r\nnode_labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']\r\n\r\ndef test_graph(adjacency_matrix, graph_type):\r\n    tool = DisasterManagementTool(graph_type)\r\n    tool.load_city_map(adjacency_matrix, node_labels)\r\n    tool.print_adjacency_matrix()\r\n    tool.display_city_map()  # ensure called only once here\r\n    \r\n\r\ndef add_new_features(tool):\r\n    \"\"\"Adds important points, impassable roads, and road types to each graph tool.\"\"\"\r\n    \r\n    tool.add_important_point('Supply Depot 1', 'A', distance=50)\r\n    tool.add_important_point('Evacuation Point', 'C')\r\n    \r\n    tool.mark_road_impassable('A', 'B')\r\n\r\n    tool.add_road_type('C', 'D', 'waterway')\r\n\r\n\r\n###############################\r\n\r\nif __name__ == \"__main__\":\r\n    # Example input from prof\r\n    # Example input adjacency matrix of directed unweighted graph with self-loops\r\n    directed_unweighted_matrix = [\r\n        #A, B, C, D, E, F, G, H, I, J\r\n        [0, 1, 0, 0, 1, 0, 1, 1, 0, 1], # A\r\n        [1, 0, 0, 0, 1, 0, 0, 0, 0, 0], # B\r\n        [1, 0, 0, 1, 0, 0, 1, 1, 0, 0], # C\r\n        [1, 0, 1, 0, 1, 0, 0, 0, 0, 0], # D\r\n        [0, 1, 0, 0, 1, 1, 0, 0, 0, 0], # E\r\n        [0, 1, 0, 0, 1, 0, 0, 0, 0, 1], # F\r\n        [1, 1, 1, 0, 0, 0, 0, 1, 1, 0], # G\r\n        [0, 0, 0, 1, 1, 0, 0, 0, 0, 0], # H\r\n        [0, 0, 0, 0, 0, 0, 1, 1, 1, 0], # I\r\n        [1, 0, 0, 0, 0, 0, 0, 0, 1, 0]  # J\r\n    ]\r\n    \r\n    # Test the different adjacency matrices\r\n    tool = DisasterManagementTool(\"directed_unweighted\")\r\n    tool.load_city_map(directed_unweighted_matrix, node_labels)\r\n    add_new_features(tool)  \r\n    tool.print_adjacency_matrix()\r\n    tool.display_city_map()\r\n\r\n    # Other matrices to test\r\n    directed_weighted_matrix = [\r\n        #A, B, C, D, E, F, G, H, I, J\r\n        [5, 1, 0, 1, 1, 0, 5, 25, 0, 17],   # A\r\n        [15, 8, 4, 0, 1, 10, 0, 0, 0, 34],  # B\r\n        [15, 0, 5, 1, 7, 0, 9, 1, 0, 0],    # C\r\n        [6, 4, 1, 0, 1, 0, 0, 0, 0, 0],     # D\r\n        [0, 1, 9, 0, 0, 10, 0, 0, 0, 0],    # E\r\n        [0, 3, 0, 0, 5, 0, 0, 0, 0, 12],    # F\r\n        [2, 3, 9, 0, 0, 0, 0, 7, 10, 0],    # G\r\n        [8, 6, 15, 2, 2, 0, 0, 0, 0, 0],    # H\r\n        [0, 13, 0, 0, 0, 0, 17, 34, 3, 0],  # I\r\n        [9, 0, 3, 0, 0, 0, 0, 0, 23, 0]     # J\r\n    ]\r\n    undirected_unweighted_matrix = [\r\n        #A, B, C, D, E, F, G, H, I, J\r\n        [0, 1, 1, 1, 0, 0, 1, 0, 0, 1], # A\r\n        [1, 0, 0, 0, 1, 1, 1, 0, 0, 0], # B\r\n        [1, 0, 0, 1, 0, 0, 1, 0, 0, 0], # C\r\n        [1, 0, 1, 0, 0, 0, 0, 1, 0, 0], # D\r\n        [0, 1, 0, 0, 0, 1, 0, 1, 0, 0], # E\r\n        [0, 1, 0, 0, 1, 0, 0, 0, 0, 0], # F\r\n        [1, 1, 1, 0, 0, 0, 0, 0, 1, 0], # G\r\n        [0, 0, 0, 1, 1, 0, 0, 0, 1, 0], # H\r\n        [0, 0, 0, 0, 0, 0, 1, 1, 0, 1], # I\r\n        [1, 0, 0, 0, 0, 0, 0, 0, 1, 0]  # J\r\n    ]\r\n    undirected_weighted_matrix = [\r\n        #A, B, C, D, E, F, G, H, I, J\r\n        [0, 1, 1, 1, 0, 0, 1, 0, 0, 1],     # A\r\n        [1, 0, 0, 0, 6, 2, 8, 0, 0, 0],     # B\r\n        [1, 0, 0, 1, 0, 0, 1, 0, 0, 0],     # C\r\n        [1, 0, 1, 0, 0, 0, 0, 1, 0, 0],     # D\r\n        [0, 6, 0, 0, 0, 1, 0, 13, 0, 0],    # E\r\n        [0, 2, 0, 0, 1, 0, 0, 0, 0, 0],     # F\r\n        [1, 8, 1, 0, 0, 0, 0, 0, 2, 0],     # G\r\n        [0, 0, 0, 1, 13, 0, 0, 0, 9, 0],    # H\r\n        [0, 0, 0, 0, 0, 0, 2, 9, 0, 2],     # I\r\n        [1, 0, 0, 0, 0, 0, 0, 0, 2, 0]      # J\r\n    ]\r\n    \r\n    # Test other matrices\r\n    test_graph(directed_weighted_matrix, \"directed_weighted\")\r\n    #test_graph(undirected_unweighted_matrix, \"undirected_unweighted\")\r\n    #test_graph(undirected_weighted_matrix, \"undirected_weighted\")\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Tool/test_disaster_management.py b/src/Tool/test_disaster_management.py
+--- a/src/Tool/test_disaster_management.py	(revision f7c16051b63166f141fccc5327865a07850cd4cf)
++++ b/src/Tool/test_disaster_management.py	(date 1735590162030)
+@@ -42,7 +42,7 @@
+     # Test the different adjacency matrices
+     tool = DisasterManagementTool("directed_unweighted")
+     tool.load_city_map(directed_unweighted_matrix, node_labels)
+-    add_new_features(tool)  
++    add_new_features(tool)
+     tool.print_adjacency_matrix()
+     tool.display_city_map()
+ 
+Index: src/Data/graph_undirected_weighted.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Data/graph_undirected_weighted.txt b/src/Data/graph_undirected_weighted.txt
+new file mode 100644
+--- /dev/null	(date 1734341369370)
++++ b/src/Data/graph_undirected_weighted.txt	(date 1734341369370)
+@@ -0,0 +1,11 @@
++  A B C D E F G H I J
++A 0
++B 1 0
++C 1 0 0
++D 1 0 1 0
++E 0 6 0 0 0
++F 0 2 0 0 1 0
++G 1 8 1 0 0 0 0
++H 0 0 0 1 13 0 0 0
++I 0 0 0 0 0 0 2 9 0
++J 1 0 0 0 0 0 0 0 2 0
+Index: src/Data/graph_undirected_unweighted.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Data/graph_undirected_unweighted.txt b/src/Data/graph_undirected_unweighted.txt
+new file mode 100644
+--- /dev/null	(date 1734341364682)
++++ b/src/Data/graph_undirected_unweighted.txt	(date 1734341364682)
+@@ -0,0 +1,11 @@
++  A B C D E F G H I J
++A 0
++B 1 0
++C 1 0 0
++D 1 0 1 0
++E 0 1 0 0 0
++F 0 1 0 0 1 0
++G 1 1 1 0 0 0 0
++H 0 0 0 1 1 0 0 0
++I 0 0 0 0 0 0 1 1 0
++J 1 0 0 0 0 0 0 0 1 0
+Index: src/Data/graph_directed_weighted.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Data/graph_directed_weighted.txt b/src/Data/graph_directed_weighted.txt
+new file mode 100644
+--- /dev/null	(date 1734341360622)
++++ b/src/Data/graph_directed_weighted.txt	(date 1734341360622)
+@@ -0,0 +1,13 @@
++  A B C D E F G H I J
++A 5 1 0 1 1 0 5 25 0 17
++B 15 8 4 0 1 10 0 0 0 34
++C 15 0 5 1 7 0 9 1 0 0
++D 6 4 1 0 1 0 0 0 0 0
++E 0 1 9 0 0 10 0 0 0 0
++F 0 3 0 0 5 0 0 0 0 12 
++G 2 3 9 0 0 0 0 7 10 0
++H 8 6 15 2 2 0 0 0 0 0
++I 0 13 0 0 0 0 17 34 3 0
++J 9 0 3 0 0 0 0 0 23 0
++
++
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+new file mode 100644
+--- /dev/null	(date 1734296778428)
++++ b/.idea/vcs.xml	(date 1734296778428)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="" vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
+Index: src/Tool/graphs_AL.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Tool/graphs_AL.py b/src/Tool/graphs_AL.py
+new file mode 100644
+--- /dev/null	(date 1735590358720)
++++ b/src/Tool/graphs_AL.py	(date 1735590358720)
+@@ -0,0 +1,147 @@
++import sys
++
++
++# This class implements an EdgeNode, an element in the adjacency list that represents an edge in the graph
++class EdgeNode:
++    def __init__(self, y, weight=0):
++        # parameter y: the destination vertex
++        # parameter weight: the weight of the edge
++        self.y = y
++        self.weight = weight
++        self.next = None
++
++
++# This class implements a simple adjacency list.
++
++class GraphAL:
++
++    def __init__(self, max_vertices, directed=False):
++        # initializes a graph
++        # parameter max_vertices: maximum number of vertices
++        # parameter directed: Boolean to indicate whether the graph is directed or undirected
++        self.max_vertices = max_vertices
++        self.nvertices = 0  # Number of vertices
++        self.nedges = 0  # Number of edges
++        self.directed = directed  # Directed graph indicator
++        self.edges = [None] * (max_vertices + 1)  # Adjacency list (1-based indexing)
++        self.degree = [0] * (max_vertices + 1)  # Degree of each vertex
++
++    def add_vertex(self):
++        # adds a vertex to a graph
++        if self.nvertices < self.max_vertices:
++            self.nvertices += 1
++        else:
++            print("Maximum number of vertices reached.")
++
++    def add_edge(self, x, y, weight=0):
++        # adds an edge from x to y to the graph
++        # parameter x: Source vertex.
++        # parameter y: Destination vertex.
++        # parameter weight: Weight of the edge.
++
++        # add the edge from x to y
++        node = EdgeNode(y, weight)
++        node.next = self.edges[x]
++        self.edges[x] = node
++
++        # Update the (out-)degree of vertex x
++        self.degree[x] += 1
++
++        # If undirected, add the reverse edge
++        if not self.directed:
++            node = EdgeNode(x, weight)
++            node.next = self.edges[y]
++            self.edges[y] = node
++            self.degree[y] += 1
++
++        # Increment the edge count
++        self.nedges += 1
++
++    def display(self):
++        # display the adjacency list of the graph
++        print(f"Graph: {self.nvertices} vertices, {self.nedges} edges, {'directed' if self.directed else 'undirected'}")
++        for i in range(1, self.nvertices + 1):
++            print(f"Vertex {i} (degree {self.degree[i]}):", end=" ")
++            current = self.edges[i]
++            while current:
++                print(f"-> ({current.y}, weight={current.weight})", end=" ")
++                current = current.next
++            print()
++
++    def prim_mst(self, start):
++        # This function computes the MST using Prim's algorithm
++        # parameter start: start node for the algorithm
++
++        intree = [False] * (self.max_vertices + 1)  # Tracks vertices that are already in the MST, initially none
++        distance = [sys.maxsize] * (self.max_vertices + 1)  # Cost (weight of the connecting edge) to add a vertex to the MST
++        parent = [-1] * (self.max_vertices + 1)  # Tracks parent of each vertex in the MST
++        weight = 0  # Total weight of the MST
++
++        # Initialize the start vertex
++        distance[start] = 0
++        v = start
++
++        while not intree[v]:
++            intree[v] = True
++
++            # If not the start vertex, include the edge in the MST
++            if parent[v] != -1:
++                print(f"Edge ({parent[v]}, {v}) in tree with weight {distance[v]}")
++                weight += distance[v]
++
++            # Update distances for adjacent vertices
++            current = self.edges[v]
++            while current:
++                w = current.y
++                if not intree[w] and distance[w] > current.weight:
++                    distance[w] = current.weight
++                    parent[w] = v
++                current = current.next
++
++            # Find the next vertex to process
++
++            dist = sys.maxsize
++            for i in range(1, self.nvertices + 1):
++                if not intree[i] and distance[i] < dist:
++                    dist = distance[i]
++                    v = i
++
++        return weight
++
++
++    def dijkstra(self, start):
++        #  Dijkstra's algorithm to find the shortest paths from a start vertex to all other vertices.
++        #  parameter graph: The graph object containing vertices and edges.
++        #  parameter start: The starting vertex.
++        #  return: A tuple containing the distances and the parent array.
++
++        known = [False] * (self.max_vertices + 1)  # # Is the vertex (and its distance to the start node) already known?
++        distance = [MAXINT] * (self.max_vertices + 1)  # Shortest known distance to each vertex
++        parent = [-1] * (self.max_vertices + 1)  # Tracks the shortest path tree
++
++        # Initialize the start vertex
++        distance[start] = 0  # Distance from start to the start node is 0
++        v = start
++
++        while not known[v]:
++            known[v] = True
++
++            # Update distances for all unknown neighbors of the current node
++            neighbor = self.edges[v]
++            while neighbor:
++                w = neighbor.y
++                if not known[w] and distance[w] > distance[v] + neighbor.weight:
++                    distance[w] = distance[v] + neighbor.weight
++                    parent[w] = v
++                neighbor = neighbor.next
++
++            # Select the next vertex with the smallest distance
++            dist = sys.maxsize
++            for i in range(1, self.nvertices + 1):
++                if not known[i] and distance[i] < dist:
++                    dist = distance[i]
++                    v = i
++
++        return distance, parent
++
++
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+new file mode 100644
+--- /dev/null	(date 1734296778414)
++++ b/.idea/modules.xml	(date 1734296778414)
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectModuleManager">
++    <modules>
++      <module fileurl="file://$PROJECT_DIR$/.idea/algodata.iml" filepath="$PROJECT_DIR$/.idea/algodata.iml" />
++    </modules>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/algodata.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/algodata.iml b/.idea/algodata.iml
+new file mode 100644
+--- /dev/null	(date 1734296778410)
++++ b/.idea/algodata.iml	(date 1734296778410)
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<module type="JAVA_MODULE" version="4">
++  <component name="NewModuleRootManager" inherit-compiler-output="true">
++    <exclude-output />
++    <content url="file://$MODULE_DIR$" />
++    <orderEntry type="inheritedJdk" />
++    <orderEntry type="sourceFolder" forTests="false" />
++  </component>
++</module>
+\ No newline at end of file
+Index: .idea/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+new file mode 100644
+--- /dev/null	(date 1734296736376)
++++ b/.idea/.gitignore	(date 1734296736376)
+@@ -0,0 +1,3 @@
++# Default ignored files
++/shelf/
++/workspace.xml
