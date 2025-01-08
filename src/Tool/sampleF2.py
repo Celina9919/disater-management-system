@@ -21,7 +21,7 @@ assembly_points = {
     'C': 50   # Example: Node C has 50 people to evacuate
 }
 shelters = {
-    'X': 50,  # Example: Shelter X can accommodate 40 people
+    'X': 40,  # Example: Shelter X can accommodate 40 people
     'Y': 60   # Example: Shelter Y can accommodate 60 people
 }
 
@@ -40,7 +40,7 @@ for shelter, capacity in shelters.items():
 
 # Add intermediate routes with capacities
 routes = {
-    ('A', 'X'): 20,  # Example: Route from A to X can handle 25 people
+    ('A', 'X'): 25,  # Example: Route from A to X can handle 25 people
     ('A', 'Y'): 15,  # Example: Route from A to Y can handle 15 people
     ('B', 'X'): 10,  # Example: Route from B to X can handle 10 people
     ('B', 'Y'): 20,  # Example: Route from B to Y can handle 20 people

@@ -90,7 +90,7 @@ paths_to_target, distances_to_target = calculate_distances_via_ei(G, ei_nodes, t
 
 # Visualization
 pos = nx.spring_layout(G, seed=42)  # Layout for consistent visualization
-plt.figure(figsize=(12, 12))
+plt.figure(figsize=(10, 10))
 
 # Draw all nodes
 nx.draw_networkx_nodes(G, pos, node_size=700, node_color="rosybrown")
