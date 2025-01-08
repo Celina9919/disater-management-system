@@ -31,7 +31,8 @@ shelters = {
     'A': 200,  # Hospital shelter 200 people
     'B': 150,  # Rescue Station shelter 150 people
     'C': 250,  # Government Building shelter 250 people
-    'D': 50,  # Evacuation Point shelter 50 people
+    'H': 50,  # staging area shelter 50 people
+    'I': 50,  # staging area shelter 50 people
 
 }
 
@@ -54,12 +55,11 @@ for shelter, capacity in shelters.items():
 
 # Add intermediate routes with capacities
 routes = {
-    ('A', 'X'): 25,  # Example: Route from A to X can handle 25 people
-    ('A', 'Y'): 15,  # Example: Route from A to Y can handle 15 people
-    ('B', 'X'): 10,  # Example: Route from B to X can handle 10 people
-    ('B', 'Y'): 20,  # Example: Route from B to Y can handle 20 people
-    ('C', 'X'): 20,  # Example: Route from C to X can handle 20 people
-    ('C', 'Y'): 30   # Example: Route from C to Y can handle 30 people
+    ('D', 'A'): 150,  # Example: Route from A to X can handle 25 people
+    ('D', 'B'): 130,  # Example: Route from A to Y can handle 15 people
+    ('D', 'C'): 200,  # Example: Route from B to X can handle 10 people
+    ('D', 'H'): 20,  # Example: Route from B to Y can handle 20 people
+    ('D', 'I'): 20,  # Example: Route from B to Y can handle 20 people
 }
 for (start, end), capacity in routes.items():
     city_map.add_edge(start, end, capacity=capacity)
