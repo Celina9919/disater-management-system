@@ -36,7 +36,7 @@ shelters = {
 }
 
 evacuation_needs = {
-    'D': 500  #500 ppl need to ecavuate
+    'D': 300  #500 ppl need to ecavuate
 }
 
 # Create the graph with capacities
@@ -44,8 +44,8 @@ city_map = nx.DiGraph()
 
 # Add assembly points to the graph with edges to a source node
 city_map.add_node('Source')
-for point, capacity in assembly_points.items():
-    city_map.add_edge('Source', point, capacity=capacity)
+for point, people in evacuation_needs.items():
+    city_map.add_edge('Source', point, capacity=people)
 
 # Add shelters to the graph with edges from a sink node
 city_map.add_node('Sink')
