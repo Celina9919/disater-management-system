@@ -118,30 +118,48 @@ def save_flow_to_csv(graph, flow_dict, filename="evacuation_flow.csv"):
     
 ##### Visualization
 def visualize_evacuation_flow(graph, flow_dict, title="Evacuation Flow Visualization"):
-    pos = nx.spring_layout(graph, seed=42, k= 3)  
+    pos = nx.spring_layout(graph, seed=42, k=3)  
     plt.figure(figsize=(12, 8))
 
+    # Drawing nodes
     nx.draw_networkx_nodes(graph, pos, node_size=700, node_color="lightblue")
-    nx.draw_networkx(graph, pos, with_labels=True, node_size=700, node_color="lightblue", font_size=10)
-    nx.draw_networkx_edges(graph, pos, width=2, alpha=0.7, edge_color="gray")
     
+    # Drawing edges (initially in gray, we'll update them)
     edge_colors = []
+    for u, v, data in graph.edges(data=True):
+        flow = flow_dict[u][v] if u in flow_dict and v in flow_dict[u] else 0
+        if (u, v) in waterway_routes:  # Waterway routes in blue
+            edge_colors.append("blue")
+        else:
+            edge_colors.append("gray")  # Default roads in gray
+
+    nx.draw_networkx_edges(graph, pos, width=2, alpha=0.7, edge_color=edge_colors)
+    
+    # Prepare node labels with description
+    node_labels = {node: f"{node}: {data.get('description', 'No description')}" for node, data in graph.nodes(data=True)}
+    nx.draw_networkx_labels(graph, pos, labels=node_labels, font_size=10, font_color="black")
+
+    # Prepare edge labels (showing flow/capacity)
     edge_labels = {}
     for u, v, data in graph.edges(data=True):
         flow = flow_dict[u][v] if u in flow_dict and v in flow_dict[u] else 0
-        label = f"{flow}/{data.get('capacity', 0)}"
-        edge_labels[(u, v)] = label
-        edge_colors.append("blue" if (u, v) in waterway_routes else "gray")
+        capacity = data.get('capacity', 0)
+        edge_labels[(u, v)] = f"Flow: {flow}/{capacity}"  # Label with flow and capacity
+    
+    # Add edge labels (flow/capacity) in red color
+    nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels, font_color="red", font_size=8)
 
-    nx.draw_networkx_edges(graph, pos, edge_color=edge_colors, width=2)
-    nx.draw_networkx_labels(graph, pos, font_size=10, font_color="black")
-    edge_labels = nx.get_edge_attributes(graph, 'capacity')
-    nx.draw_networkx_edge_labels(graph, pos, edge_labels= edge_labels, font_size=8, font_color="red")
+    # Waterway labels (showing "Waterway" text above routes)
+    for u, v, data in graph.edges(data=True):
+        if (u, v) in waterway_routes:
+            # Text label for waterway routes
+            plt.text(pos[u][0], pos[u][1] + 0.05, "Waterway", fontsize=10, color="blue", ha="center", fontweight="bold")
 
-
+    # Title for the plot
     plt.title(title, fontsize=14)
-    plt.axis("off")
+    plt.axis("off")  # Hide axes for a cleaner plot
     plt.show()
+
 
 visualize_evacuation_flow(city_map, flow_dict)
     
