@@ -64,7 +64,7 @@ routes = {
 for (start, end), capacity in routes.items():
     city_map.add_edge(start, end, capacity=capacity)
 
-# Add waterway routes (optional)
+# Add waterway routes (optional) (additional capacity)
 waterway_routes = {
     ('D', 'I'): 50  
 }
@@ -73,6 +73,8 @@ for (start, end), capacity in waterway_routes.items():
 
 # Calculate the maximum flow
 flow_value, flow_dict = nx.maximum_flow(city_map, 'Source', 'Sink', flow_func=nx.algorithms.flow.edmonds_karp)
+#nx.maximum_flow() = built in networkx func
+# used to compute max flow btw source n sink
 
 # Output results
 print(f"Maximum Flow: {flow_value}")
@@ -88,3 +90,19 @@ if flow_value >= total_demand:
     print("The existing infrastructure is sufficient for evacuation.")
 else:
     print("Additional infrastructure is needed for evacuation.")
+    
+###saving to csv  
+def save_flow_to_csv(graph, flow_dict, filename="evacuation_flow.csv"):
+    data = []
+    for source, targets in flow_dict.items():
+        for target, flow in targets.items():
+            if flow > 0:  # Record only non-zero flows
+                capacity = graph[source][target].get('capacity', 0)
+                route_type = "Waterway" if (source, target) in waterway_routes else "Road"
+                data.append([source, target, flow, capacity, route_type])
+    df = pd.DataFrame(data, columns=['Source', 'Target', 'Flow', 'Capacity', 'Route Type'])
+    df.to_csv(filename, index=False)
+    print(f"Flow details saved to {filename}")
+    
+    save_flow_to_csv(city_map, flow_dict)
+    
