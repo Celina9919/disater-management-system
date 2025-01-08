@@ -13,6 +13,7 @@ The Edmonds-Karp algorithm continues to find new paths to send more flow through
 
 import pandas as pd
 import networkx as nx
+import matplotlib.pyplot as plt
 
 # Input data
 node_attributes = {
@@ -106,6 +107,25 @@ def visualize_evacuation_flow(graph, flow_dict, title="Evacuation Flow Visualiza
     plt.figure(figsize=(12, 8))
 
     nx.draw_networkx_nodes(graph, pos, node_size=700, node_color="lightblue")
+    
+    edge_colors = []
+    edge_labels = {}
+    for u, v, data in graph.edges(data=True):
+        flow = flow_dict[u][v] if u in flow_dict and v in flow_dict[u] else 0
+        label = f"{flow}/{data.get('capacity', 0)}"
+        edge_labels[(u, v)] = label
+        edge_colors.append("blue" if (u, v) in waterway_routes else "gray")
+
+    nx.draw_networkx_edges(graph, pos, edge_color=edge_colors, width=2)
+    nx.draw_networkx_labels(graph, pos, font_size=10, font_color="black")
+
+    nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels, font_color="red", font_size=8)
+
+    plt.title(title, fontsize=14)
+    plt.axis("off")
+    plt.show()
+
+visualize_evacuation_flow(city_map, flow_dict)
     
 # Decision based on the flow
 total_demand = sum(evacuation_needs.values())
