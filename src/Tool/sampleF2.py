@@ -84,12 +84,6 @@ for source, targets in flow_dict.items():
         if flow > 0:
             print(f"  {source} -> {target}: {flow}")
 
-# Decision based on the flow
-total_demand = sum(evacuation_needs.values())
-if flow_value >= total_demand:
-    print("The existing infrastructure is sufficient for evacuation.")
-else:
-    print("Additional infrastructure is needed for evacuation.")
     
 ###saving to csv  
 def save_flow_to_csv(graph, flow_dict, filename="evacuation_flow.csv"):
@@ -105,4 +99,20 @@ def save_flow_to_csv(graph, flow_dict, filename="evacuation_flow.csv"):
     print(f"Flow details saved to {filename}")
     
     save_flow_to_csv(city_map, flow_dict)
+    
+##### Visualization
+def visualize_evacuation_flow(graph, flow_dict, title="Evacuation Flow Visualization"):
+    pos = nx.spring_layout(graph, seed=42)  
+    plt.figure(figsize=(12, 8))
+
+    nx.draw_networkx_nodes(graph, pos, node_size=700, node_color="lightblue")
+    
+# Decision based on the flow
+total_demand = sum(evacuation_needs.values())
+if flow_value >= total_demand:
+    print("The existing infrastructure is sufficient for evacuation.")
+else:
+    print("Additional infrastructure is needed for evacuation.")
+    
+    
     
