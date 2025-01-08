@@ -37,7 +37,7 @@ shelters = {
 }
 
 evacuation_needs = {
-    'D': 300  #500 ppl need to ecavuate
+    'D': 300  #300 ppl need to ecavuate
 }
 
 # Create the graph with capacities
@@ -66,13 +66,13 @@ for (start, end), capacity in routes.items():
 
 # Add waterway routes (optional)
 waterway_routes = {
-    ('C', 'X'): 10  # Example: Additional capacity over water from C to X
+    ('D', 'I'): 50  
 }
 for (start, end), capacity in waterway_routes.items():
     city_map.add_edge(start, end, capacity=capacity)
 
 # Calculate the maximum flow
-flow_value, flow_dict = nx.maximum_flow(city_map, 'Source', 'Sink')
+flow_value, flow_dict = nx.maximum_flow(city_map, 'Source', 'Sink', flow_func=nx.algorithms.flow.edmonds_karp)
 
 # Output results
 print(f"Maximum Flow: {flow_value}")
@@ -83,7 +83,7 @@ for source, targets in flow_dict.items():
             print(f"  {source} -> {target}: {flow}")
 
 # Decision based on the flow
-total_demand = sum(assembly_points.values())
+total_demand = sum(evacuation_needs.values())
 if flow_value >= total_demand:
     print("The existing infrastructure is sufficient for evacuation.")
 else:
