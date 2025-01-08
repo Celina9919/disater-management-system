@@ -15,14 +15,28 @@ import pandas as pd
 import networkx as nx
 
 # Input data
-assembly_points = {
-    'A': 30,  # Example: Node A has 30 people to evacuate
-    'B': 20,  # Example: Node B has 20 people to evacuate
-    'C': 50   # Example: Node C has 50 people to evacuate
+node_attributes = {
+    'A': "Hospital",
+    'B': "Rescue Station",
+    'C': "Government Building",
+    'D': "Evacuation Point",
+    'E': "Boat Rescue",
+    'F': "Emergency Service",
+    'G': "Supply Point",
+    'H': "Staging Area",
+    'I': "Staging Area"
 }
+
 shelters = {
-    'X': 40,  # Example: Shelter X can accommodate 40 people
-    'Y': 60   # Example: Shelter Y can accommodate 60 people
+    'A': 200,  # Hospital shelter 200 people
+    'B': 150,  # Rescue Station shelter 150 people
+    'C': 250,  # Government Building shelter 250 people
+    'D': 50,  # Evacuation Point shelter 50 people
+
+}
+
+evacuation_needs = {
+    'D': 500  #500 ppl need to ecavuate
 }
 
 # Create the graph with capacities
