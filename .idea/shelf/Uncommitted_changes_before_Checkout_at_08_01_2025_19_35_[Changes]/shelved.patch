@@ -1,0 +1,243 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"0eee45e4-59fa-4554-9ff1-607783cb34a9\" name=\"Changes\" comment=\"changes in F3 with inseparable EI\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$\" value=\"master\" />\r\n      </map>\r\n    </option>\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitLabMergeRequestFiltersHistory\">{\r\n  &quot;lastFilter&quot;: {\r\n    &quot;state&quot;: &quot;OPENED&quot;,\r\n    &quot;assignee&quot;: {\r\n      &quot;type&quot;: &quot;org.jetbrains.plugins.gitlab.mergerequest.ui.filters.GitLabMergeRequestsFiltersValue.MergeRequestsMemberFilterValue.MergeRequestsAssigneeFilterValue&quot;,\r\n      &quot;username&quot;: &quot;s240209&quot;,\r\n      &quot;fullname&quot;: &quot;Phuc Ai Tam Vo&quot;\r\n    }\r\n  }\r\n}</component>\r\n  <component name=\"GitLabMergeRequestsSettings\">{\r\n  &quot;selectedUrlAndAccountId&quot;: {\r\n    &quot;first&quot;: &quot;https://lv-gitlab.intern.th-ab.de/s231061/algodat.git&quot;,\r\n    &quot;second&quot;: &quot;5963020d-b3b3-4028-8add-b0aa5a6fc892&quot;\r\n  }\r\n}</component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 3\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2qGlKia6lE3NFTX3EOaexNKn1Me\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"kotlin-language-version-configured\": \"true\",\r\n    \"last_opened_file_path\": \"D:/PlayStation5 Project\",\r\n    \"project.structure.last.edited\": \"Modules\",\r\n    \"project.structure.proportion\": \"0.0\",\r\n    \"project.structure.side.proportion\": \"0.0\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RunManager\">\r\n    <configuration default=\"true\" type=\"JetRunConfigurationType\">\r\n      <module name=\"algodata\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration default=\"true\" type=\"KotlinStandaloneScriptRunConfigurationType\">\r\n      <module name=\"algodata\" />\r\n      <option name=\"filePath\" />\r\n      <method v=\"2\">\r\n        <option name=\"Make\" enabled=\"true\" />\r\n      </method>\r\n    </configuration>\r\n    <configuration default=\"true\" type=\"PythonConfigurationType\" factoryName=\"Python\">\r\n      <module name=\"algodata\" />\r\n      <option name=\"ENV_FILES\" value=\"\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"false\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration default=\"true\" type=\"Tox\" factoryName=\"Tox\">\r\n      <module name=\"algodata\" />\r\n      <option name=\"ENV_FILES\" value=\"\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"false\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"0eee45e4-59fa-4554-9ff1-607783cb34a9\" name=\"Changes\" comment=\"\" />\r\n      <created>1734296731225</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1734296731225</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"add F1 Function - Using Prim Algorithm - MST\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1735590531270</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1735590531270</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00002\" summary=\"add F1 Function - Using Prim Algorithm - MST\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1735595593657</created>\r\n      <option name=\"number\" value=\"00002\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1735595593657</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00003\" summary=\"add F3 Function\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1736038835237</created>\r\n      <option name=\"number\" value=\"00003\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1736038835237</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00004\" summary=\"add sample for F2 Function\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1736040162043</created>\r\n      <option name=\"number\" value=\"00004\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1736040162044</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00005\" summary=\"changes in F3 with inseparable EI\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1736087402462</created>\r\n      <option name=\"number\" value=\"00005\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1736087402462</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"6\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"add F1 node labels\" />\r\n    <MESSAGE value=\"add F1 node labels\" />\r\n    <MESSAGE value=\"add F3 Function\" />\r\n    <MESSAGE value=\"add sample for F2 Function\" />\r\n    <MESSAGE value=\"changes in F3 with inseparable EI\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"changes in F3 with inseparable EI\" />\r\n  </component>\r\n</project>
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 5f62b1f49765ad225acd002b2e54b629c6560d07)
++++ b/.idea/workspace.xml	(date 1736361030326)
+@@ -103,6 +103,40 @@
+       <option name="ADD_SOURCE_ROOTS" value="true" />
+       <method v="2" />
+     </configuration>
++    <configuration default="true" type="tests" factoryName="Autodetect">
++      <module name="algodata" />
++      <option name="ENV_FILES" value="" />
++      <option name="INTERPRETER_OPTIONS" value="" />
++      <option name="PARENT_ENVS" value="true" />
++      <option name="SDK_HOME" value="" />
++      <option name="WORKING_DIRECTORY" value="" />
++      <option name="IS_MODULE_SDK" value="false" />
++      <option name="ADD_CONTENT_ROOTS" value="true" />
++      <option name="ADD_SOURCE_ROOTS" value="true" />
++      <option name="_new_additionalArguments" value="&quot;&quot;" />
++      <option name="_new_target" value="&quot;&quot;" />
++      <option name="_new_targetType" value="&quot;PATH&quot;" />
++      <method v="2" />
++    </configuration>
++    <configuration default="true" type="tests" factoryName="Doctests">
++      <module name="algodata" />
++      <option name="ENV_FILES" value="" />
++      <option name="INTERPRETER_OPTIONS" value="" />
++      <option name="PARENT_ENVS" value="true" />
++      <option name="SDK_HOME" value="" />
++      <option name="WORKING_DIRECTORY" value="" />
++      <option name="IS_MODULE_SDK" value="false" />
++      <option name="ADD_CONTENT_ROOTS" value="true" />
++      <option name="ADD_SOURCE_ROOTS" value="true" />
++      <option name="SCRIPT_NAME" value="" />
++      <option name="CLASS_NAME" value="" />
++      <option name="METHOD_NAME" value="" />
++      <option name="FOLDER_NAME" value="" />
++      <option name="TEST_TYPE" value="TEST_SCRIPT" />
++      <option name="PATTERN" value="" />
++      <option name="USE_PATTERN" value="false" />
++      <method v="2" />
++    </configuration>
+   </component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="TaskManager">
+@@ -153,7 +187,15 @@
+       <option name="project" value="LOCAL" />
+       <updated>1736087402462</updated>
+     </task>
+-    <option name="localTasksCounter" value="6" />
++    <task id="LOCAL-00006" summary="changes in F3 with inseparable EI">
++      <option name="closed" value="true" />
++      <created>1736360693805</created>
++      <option name="number" value="00006" />
++      <option name="presentableId" value="LOCAL-00006" />
++      <option name="project" value="LOCAL" />
++      <updated>1736360693805</updated>
++    </task>
++    <option name="localTasksCounter" value="7" />
+     <servers />
+   </component>
+   <component name="Vcs.Log.Tabs.Properties">
+Index: src/Tool/sampleF2.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\"\"\"\r\nUse Maximum Flow Algorithms (specifically, the Edmonds-Karp Algorithm,\r\nEdmonds-Karp algorithm uses Breadth First Search (BFS) to find augmented paths to increase flow) to determine\r\nwhether the existing infrastructure can handle the evacuation demand\r\nfrom assembly points to emergency shelters, considering road and water routes.\r\n\r\nThe Edmonds-Karp algorithm works by using Breadth-First Search (BFS)\r\nto find a path with available capacity from the source to the sink (called an augmented path),\r\nand then sends as much flow as possible through that path.\r\n\r\nThe Edmonds-Karp algorithm continues to find new paths to send more flow through until the maximum flow is reached.\r\n\"\"\"\r\n\r\nimport pandas as pd\r\nimport networkx as nx\r\n\r\n# Input data\r\nassembly_points = {\r\n    'A': 30,  # Example: Node A has 30 people to evacuate\r\n    'B': 20,  # Example: Node B has 20 people to evacuate\r\n    'C': 50   # Example: Node C has 50 people to evacuate\r\n}\r\nshelters = {\r\n    'X': 40,  # Example: Shelter X can accommodate 40 people\r\n    'Y': 60   # Example: Shelter Y can accommodate 60 people\r\n}\r\n\r\n# Create the graph with capacities\r\ncity_map = nx.DiGraph()\r\n\r\n# Add assembly points to the graph with edges to a source node\r\ncity_map.add_node('Source')\r\nfor point, capacity in assembly_points.items():\r\n    city_map.add_edge('Source', point, capacity=capacity)\r\n\r\n# Add shelters to the graph with edges from a sink node\r\ncity_map.add_node('Sink')\r\nfor shelter, capacity in shelters.items():\r\n    city_map.add_edge(shelter, 'Sink', capacity=capacity)\r\n\r\n# Add intermediate routes with capacities\r\nroutes = {\r\n    ('A', 'X'): 25,  # Example: Route from A to X can handle 25 people\r\n    ('A', 'Y'): 15,  # Example: Route from A to Y can handle 15 people\r\n    ('B', 'X'): 10,  # Example: Route from B to X can handle 10 people\r\n    ('B', 'Y'): 20,  # Example: Route from B to Y can handle 20 people\r\n    ('C', 'X'): 20,  # Example: Route from C to X can handle 20 people\r\n    ('C', 'Y'): 30   # Example: Route from C to Y can handle 30 people\r\n}\r\nfor (start, end), capacity in routes.items():\r\n    city_map.add_edge(start, end, capacity=capacity)\r\n\r\n# Add waterway routes (optional)\r\nwaterway_routes = {\r\n    ('C', 'X'): 10  # Example: Additional capacity over water from C to X\r\n}\r\nfor (start, end), capacity in waterway_routes.items():\r\n    city_map.add_edge(start, end, capacity=capacity)\r\n\r\n# Calculate the maximum flow\r\nflow_value, flow_dict = nx.maximum_flow(city_map, 'Source', 'Sink')\r\n\r\n# Output results\r\nprint(f\"Maximum Flow: {flow_value}\")\r\nprint(\"Flow Details:\")\r\nfor source, targets in flow_dict.items():\r\n    for target, flow in targets.items():\r\n        if flow > 0:\r\n            print(f\"  {source} -> {target}: {flow}\")\r\n\r\n# Decision based on the flow\r\ntotal_demand = sum(assembly_points.values())\r\nif flow_value >= total_demand:\r\n    print(\"The existing infrastructure is sufficient for evacuation.\")\r\nelse:\r\n    print(\"Additional infrastructure is needed for evacuation.\")\r\n
+===================================================================
+diff --git a/src/Tool/sampleF2.py b/src/Tool/sampleF2.py
+--- a/src/Tool/sampleF2.py	(revision 5f62b1f49765ad225acd002b2e54b629c6560d07)
++++ b/src/Tool/sampleF2.py	(date 1736361250371)
+@@ -13,52 +13,84 @@
+ 
+ import pandas as pd
+ import networkx as nx
++import matplotlib.pyplot as plt
++
++file_path = 'src/Data/undirected_weighted_graph.txt'
++
++adjacency_matrix = pd.read_csv(file_path, delim_whitespace=True, index_col=0)
++
++G = nx.from_pandas_adjacency(adjacency_matrix, create_using=nx.Graph) #undirected
++
++# Convert the undirected graph to a directed graph for Edmonds-Karp algorithm
++city_map = nx.DiGraph()
++
++# Copy all nodes and edges to the directed graph
++for u, v, data in G.edges(data=True):
++    city_map.add_edge(u, v, capacity=data['weight'])  # Adding capacity as weight
++    city_map.add_edge(v, u, capacity=data['weight'])  # Reverse direction for undirected graph
++
+ 
+ # Input data
+-assembly_points = {
+-    'A': 30,  # Example: Node A has 30 people to evacuate
+-    'B': 20,  # Example: Node B has 20 people to evacuate
+-    'C': 50   # Example: Node C has 50 people to evacuate
++node_attributes = {
++    'A': "Hospital",
++    'B': "Rescue Station",
++    'C': "Government Building",
++    'D': "Evacuation Point",
++    'E': "Boat Rescue",
++    'F': "Emergency Service",
++    'G': "Supply Point",
++    'H': "Staging Area",
++    'I': "Staging Area"
+ }
++
++nx.set_node_attributes(city_map, node_attributes, "description")
++
++
+ shelters = {
+-    'X': 40,  # Example: Shelter X can accommodate 40 people
+-    'Y': 60   # Example: Shelter Y can accommodate 60 people
++    'A': 200,  # Hospital shelter 200 people
++    'B': 150,  # Rescue Station shelter 150 people
++    'C': 250,  # Government Building shelter 250 people
++    'H': 50,  # staging area shelter 50 people
++    'I': 50,  # staging area shelter 50 people
++
+ }
+ 
+-# Create the graph with capacities
+-city_map = nx.DiGraph()
++evacuation_needs = {
++    'D': 300  #300 ppl need to ecavuate
++}
+ 
+-# Add assembly points to the graph with edges to a source node
++
++# add source
+ city_map.add_node('Source')
+-for point, capacity in assembly_points.items():
+-    city_map.add_edge('Source', point, capacity=capacity)
++for point, people in evacuation_needs.items():
++    city_map.add_edge('Source', point, capacity=people)
+ 
+-# Add shelters to the graph with edges from a sink node
++# add sink
+ city_map.add_node('Sink')
+ for shelter, capacity in shelters.items():
+     city_map.add_edge(shelter, 'Sink', capacity=capacity)
+ 
+-# Add intermediate routes with capacities
+ routes = {
+-    ('A', 'X'): 25,  # Example: Route from A to X can handle 25 people
+-    ('A', 'Y'): 15,  # Example: Route from A to Y can handle 15 people
+-    ('B', 'X'): 10,  # Example: Route from B to X can handle 10 people
+-    ('B', 'Y'): 20,  # Example: Route from B to Y can handle 20 people
+-    ('C', 'X'): 20,  # Example: Route from C to X can handle 20 people
+-    ('C', 'Y'): 30   # Example: Route from C to Y can handle 30 people
++    ('D', 'A'): 150,  # Example: Route from A to X can handle 25 people
++    ('D', 'B'): 130,  # Example: Route from A to Y can handle 15 people
++    ('D', 'C'): 200,  # Example: Route from B to X can handle 10 people
++    ('D', 'H'): 20,  # Example: Route from B to Y can handle 20 people
++    ('D', 'I'): 20,  # Example: Route from B to Y can handle 20 people
+ }
+ for (start, end), capacity in routes.items():
+     city_map.add_edge(start, end, capacity=capacity)
+ 
+-# Add waterway routes (optional)
++# add waterway (optional) (additional capacity)
+ waterway_routes = {
+-    ('C', 'X'): 10  # Example: Additional capacity over water from C to X
++    ('D', 'I'): 50  
+ }
+ for (start, end), capacity in waterway_routes.items():
+     city_map.add_edge(start, end, capacity=capacity)
+ 
+ # Calculate the maximum flow
+-flow_value, flow_dict = nx.maximum_flow(city_map, 'Source', 'Sink')
++flow_value, flow_dict = nx.maximum_flow(city_map, 'Source', 'Sink', flow_func=nx.algorithms.flow.edmonds_karp)
++#nx.maximum_flow() = built in networkx func
++# used to compute max flow btw source n sink
+ 
+ # Output results
+ print(f"Maximum Flow: {flow_value}")
+@@ -68,9 +100,60 @@
+         if flow > 0:
+             print(f"  {source} -> {target}: {flow}")
+ 
++    
++###saving to csv  
++def save_flow_to_csv(graph, flow_dict, filename="evacuation_flow.csv"):
++    data = []
++    for source, targets in flow_dict.items():
++        for target, flow in targets.items():
++            if flow > 0:  # Record only non-zero flows
++                capacity = graph[source][target].get('capacity', 0)
++                route_type = "Waterway" if (source, target) in waterway_routes else "Road"
++                data.append([source, target, flow, capacity, route_type])
++    df = pd.DataFrame(data, columns=['Source', 'Target', 'Flow', 'Capacity', 'Route Type'])
++    df.to_csv(filename, index=False)
++    print(f"Flow details saved to {filename}")
++    
++    save_flow_to_csv(city_map, flow_dict)
++    
++##### Visualization
++def visualize_evacuation_flow(graph, flow_dict, title="Evacuation Flow Visualization"):
++    pos = nx.spring_layout(graph, seed=42, k= 3)  
++    plt.figure(figsize=(12, 8))
++
++    nx.draw_networkx_nodes(graph, pos, node_size=700, node_color="lightblue")
++    nx.draw_networkx(graph, pos, with_labels=True, node_size=700, node_color="lightblue", font_size=10)
++    nx.draw_networkx_edges(graph, pos, width=2, alpha=0.7, edge_color="gray")
++    
++    edge_colors = []
++    edge_labels = {}
++    for u, v, data in graph.edges(data=True):
++        flow = flow_dict[u][v] if u in flow_dict and v in flow_dict[u] else 0
++        label = f"{flow}/{data.get('capacity', 0)}"
++        edge_labels[(u, v)] = label
++        edge_colors.append("blue" if (u, v) in waterway_routes else "gray")
++
++    nx.draw_networkx_edges(graph, pos, edge_color=edge_colors, width=2)
++    nx.draw_networkx_labels(graph, pos, font_size=10, font_color="black")
++    edge_labels = nx.get_edge_attributes(graph, 'capacity')
++    nx.draw_networkx_edge_labels(graph, pos, edge_labels= edge_labels, font_size=8, font_color="red")
++
++
++    plt.title(title, fontsize=14)
++    plt.axis("off")
++    plt.show()
++
++visualize_evacuation_flow(city_map, flow_dict)
++    
+ # Decision based on the flow
+-total_demand = sum(assembly_points.values())
++total_demand = sum(evacuation_needs.values())
+ if flow_value >= total_demand:
+     print("The existing infrastructure is sufficient for evacuation.")
+ else:
+     print("Additional infrastructure is needed for evacuation.")
++    
++
++print(f"Maximum Flow: {flow_value}")
++    
++    
++    
