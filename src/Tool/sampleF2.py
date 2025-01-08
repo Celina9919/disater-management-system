@@ -15,6 +15,24 @@ import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
 
+# Input file path (undirected weighted graph)
+file_path = 'src/Data/undirected_weighted_graph.txt'
+
+# Load the undirected graph using pandas to read adjacency matrix
+adjacency_matrix = pd.read_csv(file_path, delim_whitespace=True, index_col=0)
+
+# Create an undirected graph using networkx
+G = nx.from_pandas_adjacency(adjacency_matrix, create_using=nx.Graph)
+
+# Convert the undirected graph to a directed graph for the Edmonds-Karp algorithm
+city_map = nx.DiGraph()
+
+# Copy all nodes and edges to the directed graph
+for u, v, data in G.edges(data=True):
+    city_map.add_edge(u, v, capacity=data['weight'])  # Adding capacity as weight
+    city_map.add_edge(v, u, capacity=data['weight'])  # Reverse direction for undirected graph
+
+
 # Input data
 node_attributes = {
     'A': "Hospital",
@@ -27,6 +45,7 @@ node_attributes = {
     'H': "Staging Area",
     'I': "Staging Area"
 }
+
 
 shelters = {
     'A': 200,  # Hospital shelter 200 people
@@ -41,20 +60,17 @@ evacuation_needs = {
     'D': 300  #300 ppl need to ecavuate
 }
 
-# Create the graph with capacities
-city_map = nx.DiGraph()
 
-# Add assembly points to the graph with edges to a source node
+# add source
 city_map.add_node('Source')
 for point, people in evacuation_needs.items():
     city_map.add_edge('Source', point, capacity=people)
 
-# Add shelters to the graph with edges from a sink node
+# add sink
 city_map.add_node('Sink')
 for shelter, capacity in shelters.items():
     city_map.add_edge(shelter, 'Sink', capacity=capacity)
 
-# Add intermediate routes with capacities
 routes = {
     ('D', 'A'): 150,  # Example: Route from A to X can handle 25 people
     ('D', 'B'): 130,  # Example: Route from A to Y can handle 15 people
@@ -65,7 +81,7 @@ routes = {
 for (start, end), capacity in routes.items():
     city_map.add_edge(start, end, capacity=capacity)
 
-# Add waterway routes (optional) (additional capacity)
+# add waterway (optional) (additional capacity)
 waterway_routes = {
     ('D', 'I'): 50  
 }
@@ -133,6 +149,9 @@ if flow_value >= total_demand:
     print("The existing infrastructure is sufficient for evacuation.")
 else:
     print("Additional infrastructure is needed for evacuation.")
+    
+
+print(f"Maximum Flow: {flow_value}")
     
     
     
