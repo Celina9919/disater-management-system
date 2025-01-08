@@ -15,16 +15,13 @@ import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
 
-# Input file path (undirected weighted graph)
 file_path = 'src/Data/undirected_weighted_graph.txt'
 
-# Load the undirected graph using pandas to read adjacency matrix
 adjacency_matrix = pd.read_csv(file_path, delim_whitespace=True, index_col=0)
 
-# Create an undirected graph using networkx
-G = nx.from_pandas_adjacency(adjacency_matrix, create_using=nx.Graph)
+G = nx.from_pandas_adjacency(adjacency_matrix, create_using=nx.Graph) #undirected
 
-# Convert the undirected graph to a directed graph for the Edmonds-Karp algorithm
+# Convert the undirected graph to a directed graph for Edmonds-Karp algorithm
 city_map = nx.DiGraph()
 
 # Copy all nodes and edges to the directed graph
@@ -45,6 +42,8 @@ node_attributes = {
     'H': "Staging Area",
     'I': "Staging Area"
 }
+
+nx.set_node_attributes(city_map, node_attributes, "description")
 
 
 shelters = {
@@ -119,10 +118,12 @@ def save_flow_to_csv(graph, flow_dict, filename="evacuation_flow.csv"):
     
 ##### Visualization
 def visualize_evacuation_flow(graph, flow_dict, title="Evacuation Flow Visualization"):
-    pos = nx.spring_layout(graph, seed=42)  
+    pos = nx.spring_layout(graph, seed=42, k= 3)  
     plt.figure(figsize=(12, 8))
 
     nx.draw_networkx_nodes(graph, pos, node_size=700, node_color="lightblue")
+    nx.draw_networkx(graph, pos, with_labels=True, node_size=700, node_color="lightblue", font_size=10)
+    nx.draw_networkx_edges(graph, pos, width=2, alpha=0.7, edge_color="gray")
     
     edge_colors = []
     edge_labels = {}
@@ -134,8 +135,9 @@ def visualize_evacuation_flow(graph, flow_dict, title="Evacuation Flow Visualiza
 
     nx.draw_networkx_edges(graph, pos, edge_color=edge_colors, width=2)
     nx.draw_networkx_labels(graph, pos, font_size=10, font_color="black")
+    edge_labels = nx.get_edge_attributes(graph, 'capacity')
+    nx.draw_networkx_edge_labels(graph, pos, edge_labels= edge_labels, font_size=8, font_color="red")
 
-    nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels, font_color="red", font_size=8)
 
     plt.title(title, fontsize=14)
     plt.axis("off")
