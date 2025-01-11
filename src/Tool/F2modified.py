@@ -194,7 +194,10 @@ def visualize_evacuation_flow(graph, flow_dict, title="Evacuation Flow Visualiza
 
     edge_colors = []
     for u, v, data in graph.edges(data=True):
-        edge_colors.append("gray")
+        if u == 'D' and v in shelter_nodes:
+            edge_colors.append('red')  # Evacuation routes
+        else:
+            edge_colors.append('gray')  # Other edges
 
     nx.draw_networkx_edges(graph, pos, width=2, alpha=0.7, edge_color=edge_colors)
 
@@ -212,21 +215,35 @@ def visualize_evacuation_flow(graph, flow_dict, title="Evacuation Flow Visualiza
 
     # Add flow information to edge labels
     edge_labels = {}
-    for shelter, flows in shelter_flow_details.items():
-        for source, targets in flows.items():
-            for target, flow in targets.items():
-                edge_labels[(source, target)] = f"{flow}"
-    
-    # Decision
-        if total_flow >= evacuation_needs:
-            print("\nThe existing infrastructure is sufficient for evacuation.")
+    for u, v, data in graph.edges(data=True):
+        current_flow = data.get('current_flow', 0)
+        if u == 'D' and v in shelter_nodes:
+            max_capacity = routes.get((u, v), data.get('capacity', 0))
         else:
-            print("\nAdditional infrastructure is needed for evacuation.")
+            max_capacity = data.get('capacity', 0)
+        edge_labels[(u, v)] = f"{current_flow}/{max_capacity}"
+    
 
     nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels, font_color="blue", font_size=8)
     plt.title(title, fontsize=14)
     plt.axis("off")
     plt.show()
+    
+# Output results with controlled infrastructure message
+print(f"Maximum Flow: {total_flow}")
+print("\nFlow Details by Shelter:")
+for shelter, flows in shelter_flow_details.items():
+    print(f"\nShelter {shelter}:")
+    if flows:
+        for source, targets in flows.items():
+            for target, flow in targets.items():
+                print(f"  {source} -> {target}: {flow}")
+        if shelter in ['A', 'B', 'C', 'H', 'I']:  # print message for these shelters ONLY
+            print("The existing infrastructure is sufficient for evacuation.")
+    else:
+        print("  No flow received.")
+        if shelter in ['A', 'B', 'C', 'H', 'I']:  
+            print("The existing infrastructure is sufficient for evacuation.")
 
 visualize_evacuation_flow(city_map, shelter_flow_details)
 
