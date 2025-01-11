@@ -18,6 +18,7 @@ Sink Points: Nodes A, B, C, H, I - Shelters
 import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
+import random
 
 # Load adjacency matrix
 file_path = 'src/Data/undirected_weighted_graph.txt'
@@ -63,6 +64,11 @@ nx.set_node_attributes(city_map, shelters, "capacity")
 # Evacuation needs (set source : 'D')
 evacuation_needs = 300
 
+# define shelter nodes
+shelter_nodes = ['A', 'B', 'C', 'H', 'I']
+
+# initialize flow dictionary with 0 flows for all edges
+random_flow_details = {(u, v): 0 for u, v in city_map.edges()}
 
 routes = {
     ('D', 'A'): 150,
@@ -71,9 +77,67 @@ routes = {
     ('D', 'H'): 20,
     ('D', 'I'): 20
 }
-for (start, end), capacity in routes.items(): 
-    city_map.add_edge(start, end, capacity=capacity) #directed edges + capacities from D to shelters
 
+# Update capacities for evacuation routes
+for (start, end), capacity in routes.items():
+    if city_map.has_edge(start, end):
+        city_map[start][end]['capacity'] = capacity
+        
+# Calculate total available capacity
+total_available_capacity = sum(min(routes[('D', shelter)], shelters[shelter]) 
+                             for shelter in shelter_nodes)
+
+if total_available_capacity < evacuation_needs:
+    raise ValueError(f"Not enough capacity to evacuate {evacuation_needs} people. Maximum capacity is {total_available_capacity}")
+
+# Initialize flows to zero
+for shelter in shelter_nodes:
+    random_flow_details[('D', shelter)] = 0
+
+# First pass: Randomly distribute most of the flow
+remaining_to_evacuate = evacuation_needs
+while remaining_to_evacuate > 0:
+    available_shelters = [s for s in shelter_nodes 
+                         if random_flow_details[('D', s)] < min(routes[('D', s)], shelters[s])]
+    
+    if not available_shelters:
+        break
+        
+    shelter = random.choice(available_shelters)
+    current_flow = random_flow_details[('D', shelter)]
+    max_capacity = min(routes[('D', shelter)], shelters[shelter])
+    space_left = max_capacity - current_flow
+    
+    # For the last bit of flow, just assign what's needed
+    if remaining_to_evacuate <= 10:
+        flow = min(remaining_to_evacuate, space_left)
+    else:
+        # Otherwise, assign a random amount but leave some for other shelters
+        max_flow = min(remaining_to_evacuate - 5, space_left)
+        flow = random.randint(1, max_flow) if max_flow > 0 else 0
+    
+    random_flow_details[('D', shelter)] += flow
+    remaining_to_evacuate -= flow
+
+# If there's still remaining flow, distribute it to shelters with remaining capacity
+if remaining_to_evacuate > 0:
+    for shelter in shelter_nodes:
+        current_flow = random_flow_details[('D', shelter)]
+        max_capacity = min(routes[('D', shelter)], shelters[shelter])
+        space_left = max_capacity - current_flow
+        
+        if space_left > 0:
+            additional_flow = min(space_left, remaining_to_evacuate)
+            random_flow_details[('D', shelter)] += additional_flow
+            remaining_to_evacuate -= additional_flow
+            
+            if remaining_to_evacuate == 0:
+                break
+            
+# Update graph edges with current flow
+for u, v in city_map.edges():
+    city_map[u][v]['current_flow'] = random_flow_details.get((u, v), 0)
+        
 # shelters should ONLY RECEIVE flow not send 
 for shelter in shelters: #shelters = Sink
     city_map.remove_edges_from([(shelter, neighbor) for neighbor in city_map.successors(shelter)])
@@ -123,7 +187,7 @@ for shelter, flows in shelter_flow_details.items():
 
 # Visualization
 def visualize_evacuation_flow(graph, flow_dict, title="Evacuation Flow Visualization"):
-    pos = nx.spring_layout(graph, seed=42, k=3)
+    pos = nx.spring_layout(graph, seed=42, k=5)
     plt.figure(figsize=(12, 8))
 
     nx.draw_networkx_nodes(graph, pos, node_size=700, node_color="rosybrown")
@@ -174,8 +238,9 @@ Shelter C: 200 people
 Shelter H: 40 people (DH + EH + FH + GH = 20 + 4 + 7 + 9 = 40 )
 Shelter I: 20 people
 
-Shelter H method is used to avoid additional supersink points 
-an avoid path concurrency to the shelter
+Shelter H method is used to avoid addtional points for super sink and 
+avoid path concurrency to shelter
+
 
 Maximum Flow: 150 + 130 + 200 + 40 + 20 = 540 people
 Hence, in this case, with the evacuation need of 300 people, the existing infrastructure is sufficient for evacuation.
