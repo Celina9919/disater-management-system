@@ -68,7 +68,73 @@ deployment_details = {(u, v): 0 for u, v in deployment_map.edges()}
 #tracks num of units deployed 4 each edge
 
 # calc total available capacity from staging areas
-total_staging_capacity = sum(staging_areas.values()) 
+total_staging_capacity = sum(staging_areas.values())
+
+########BFS
+def bfs_deployment(graph, start_node, target_node, required_units):
+    """
+    Performs BFS to find a path from a staging area (start_node) to a deployment site (target_node)
+    """
+    visited = set() #keep track have vsited or not, to avoid cycles
+    queue = [(start_node, [start_node])] #stores node to explore next, along w current path
+    #initial : start_node w empty path
+    
+    while queue: #while nodes to explore, the fx DEQUEUES node and look at al connected neighbours
+        (vertex, path) = queue.pop(0) #dequeues
+        for next_node in set(graph[vertex]) - visited: #for next node of current node, if not visited, add to queue
+            if next_node == target_node: #return
+                return path + [next_node]
+            queue.append((next_node, path + [next_node]))
+            visited.add(next_node)
+    return None #no path
+
+# deploy units from staging areas to deployment sites
+def deploy_units():
+    deployment_results = {} #stores the result of deployment: num of units deployed n path used
+    
+    
+    for site, needed in deployment_needs.items(): #for ea depl node, CHECK how many units needed
+        deployed = 0 #init counter 
+        deployment_results[site] = {'total_deployed': 0, 'paths': []} #tracks units alrd deployed
+        
+        # deploying from each staging area
+        for staging in staging_areas.keys():
+            if deployed >= needed: #ea SA : checks if req number of units have been deployed
+                break
+            
+            #calls fx bfs_deployment : to find a path from current SA to current deployment node   
+            path = bfs_deployment(deployment_map, staging, site, needed - deployed) #needed-deployed : deploy remaining needs #checks
+            
+            if path:
+                # calc available capacity along the path
+                available_capacity = min(
+                    min(deployment_map[u][v]['capacity'] - deployment_details.get((u, v), 0)
+                        for u, v in zip(path[:-1], path[1:])),
+                    staging_areas[staging], #avail units in SA
+                    needed - deployed #remaining units needed at deploy node
+                )
+                
+                if available_capacity > 0:
+                    # update flow of units along ea edge in path
+                    for u, v in zip(path[:-1], path[1:]):
+                        deployment_details[(u, v)] = deployment_details.get((u, v), 0) + available_capacity
+                    
+                    
+                    ####DEPLOYED UNITS (update)
+                    deployed += available_capacity
+                    deployment_results[site]['total_deployed'] += available_capacity
+                    deployment_results[site]['paths'].append({
+                        'path': path,
+                        'units': available_capacity
+                    })
+                    
+    
+                    staging_areas[staging] -= available_capacity 
+                    # update staging area capacity : reduced by num of units deployed alrd
+    
+    return deployment_results 
+
+deployment_results = deploy_units() 
 
 
 
