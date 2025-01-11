@@ -28,9 +28,11 @@ G = nx.from_pandas_adjacency(adjacency_matrix, create_using=nx.Graph)
 
 # Convert the undirected graph to a directed graph
 city_map = nx.DiGraph()
+
+# copy all nodes and edges to the directed graph
 for u, v, data in G.edges(data=True):
-    city_map.add_edge(u, v, capacity=data['weight'])
-    city_map.add_edge(v, u, capacity=data['weight'])
+    city_map.add_edge(u, v, capacity=data['weight'])  #data is attributes of the edge
+    city_map.add_edge(v, u, capacity=data['weight']) #biderectional, uv and vu
 
 # Assign attributes to nodes
 node_attributes = {
@@ -55,13 +57,13 @@ shelters = {
     'I': 50    # Staging Area
 }
 
-# Add shelter capacities as node attributes
+# add shelter's capacities as node attributes
 nx.set_node_attributes(city_map, shelters, "capacity")
 
-# Evacuation needs (source is 'D')
+# Evacuation needs (set source : 'D')
 evacuation_needs = 300
 
-# Add routes capacities from the source (D) to the shelters
+
 routes = {
     ('D', 'A'): 150,
     ('D', 'B'): 130,
@@ -69,20 +71,22 @@ routes = {
     ('D', 'H'): 20,
     ('D', 'I'): 20
 }
-for (start, end), capacity in routes.items():
-    city_map.add_edge(start, end, capacity=capacity)
+for (start, end), capacity in routes.items(): 
+    city_map.add_edge(start, end, capacity=capacity) #directed edges + capacities from D to shelters
 
-# Remove outgoing edges from shelters to enforce sink behavior
-for shelter in shelters:
+# shelters should ONLY RECEIVE flow not send 
+for shelter in shelters: #shelters = Sink
     city_map.remove_edges_from([(shelter, neighbor) for neighbor in city_map.successors(shelter)])
+    #city_map.remove_edges_from : remove all outgoing edges from shelters
+    #city_map.successors : find all outgoing edges from sheltes
 
 # Initialize variables
-shelter_flow_details = {}
-total_flow = 0
+shelter_flow_details = {}  #stores flow details of ea shelter
+total_flow = 0 #total flow of source(D) to all shelter
 
 # Calculate maximum flow for each shelter independently, prioritizing smaller shelters
 for shelter, capacity in sorted(shelters.items(), key=lambda x: x[1]):  # Sort by shelter capacity (ascending)
-    # Calculate maximum flow from the source (D) to the shelter
+    # calc maximum flow from the source (D) to the shelter
     flow_value, current_flow = nx.maximum_flow(city_map, 'D', shelter, flow_func=nx.algorithms.flow.edmonds_karp)
 
     # Limit flow by shelter capacity
@@ -169,6 +173,9 @@ Shelter B: 130 people
 Shelter C: 200 people
 Shelter H: 40 people (DH + EH + FH + GH = 20 + 4 + 7 + 9 = 40 )
 Shelter I: 20 people
+
+Shelter H method is used to avoid additional supersink points 
+an avoid path concurrency to the shelter
 
 Maximum Flow: 150 + 130 + 200 + 40 + 20 = 540 people
 Hence, in this case, with the evacuation need of 300 people, the existing infrastructure is sufficient for evacuation.
