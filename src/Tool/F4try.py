@@ -136,5 +136,63 @@ def deploy_units():
 
 deployment_results = deploy_units() 
 
+# Visualize 
+def visualize_deployment(graph, deployment_results, title="Emergency Services Deployment Visualization"):
+    pos = nx.spring_layout(graph, seed=42, k=10)
+    plt.figure(figsize=(12, 8))
+    
+    nx.draw_networkx_nodes(graph, pos, node_size=700, node_color="lightblue")
+    
+    edge_colors = []
+    edge_widths = []
+    for u, v, data in graph.edges(data=True):
+        if (u, v) in routes or (v, u) in routes:
+            edge_colors.append('red')
+            edge_widths.append(2)
+        else:
+            edge_colors.append('gray')
+            edge_widths.append(1)
+    
+    nx.draw_networkx_edges(graph, pos, width=edge_widths, edge_color=edge_colors, alpha=0.7)
+    
+    node_labels = {}
+    for node, data in graph.nodes(data=True):
+        description = data.get('description', '')
+        capacity = data.get('capacity', '')
+        if capacity:
+            node_labels[node] = f"{node}: {description}\n{capacity}"
+        else:
+            node_labels[node] = f"{node}: {description}"
+    
+    nx.draw_networkx_labels(graph, pos, labels=node_labels, font_size=8)
+    
+    edge_labels = {}
+    for u, v, data in graph.edges(data=True):
+        if (u, v) in routes:
+            flow = deployment_details.get((u, v), 0)
+            capacity = data['capacity']
+            edge_labels[(u, v)] = f"{flow}/{capacity}"
+    
+    nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels, font_size=8)
+    
+    plt.title(title)
+    plt.axis('off')
+    plt.show()
+
+
+print("\nDeployment Results:")
+for site, result in deployment_results.items():
+    print(f"\nSite {site} ({node_attributes[site]}):")
+    print(f"Total units deployed: {result['total_deployed']}/{deployment_needs[site]}")
+    print("Deployment paths:")
+    for path_info in result['paths']:
+        path_str = " -> ".join(path_info['path'])
+        print(f"  {path_str}: {path_info['units']} units")
+
+
+visualize_deployment(deployment_map, deployment_results)
+
+
+
 
 
