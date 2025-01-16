@@ -1,27 +1,30 @@
 """
 Using K-Means Clustering Algorithm to add 2 additional supply points
+K-Means Clustering → Iterative partitioning of nodes.
+Dijkstra's Algorithm → For distance calculations.
+
+
+GOAL : to minimize the average distance from all relief forces to the nearest 
+supply point and distribute relief forces evenly
 
 """
 import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans
-import numpy as np
+import random
 
-# Load adjacency matrix
-file_path = '/mnt/data/undirected_weighted_graph.txt'  # Update to your file path
-adjacency_matrix = pd.read_csv(file_path, sep='\s+', index_col=0)
+#use undirected
+file_path = 'src/Data/undirected_weighted_graph.txt'
+adjacency_matrix = pd.read_csv(file_path, delim_whitespace=True, index_col=0)
 
-# Create an undirected graph
-G = nx.from_pandas_adjacency(adjacency_matrix, create_using=nx.Graph)
+# create a graph from the adjacency matrix
+G = nx.Graph()
+for i, row in adjacency_matrix.iterrows():
+    for j, weight in row.items():
+        if weight > 0 and i != j:
+            G.add_edge(i, j, weight=weight)
 
-# Convert the undirected graph to a directed graph
-city_map = nx.DiGraph()
-for u, v, data in G.edges(data=True):
-    city_map.add_edge(u, v, capacity=data.get("weight", adjacency_matrix.loc[u, v]))
-    city_map.add_edge(v, u, capacity=data.get("weight", adjacency_matrix.loc[u, v]))
-
-# Assign attributes to nodes
+# node descriptions
 node_attributes = {
     'A': "Hospital",
     'B': "Rescue Station",
@@ -33,77 +36,137 @@ node_attributes = {
     'H': "Staging Area",
     'I': "Staging Area"
 }
-nx.set_node_attributes(city_map, node_attributes, "description")
+nx.set_node_attributes(G, node_attributes, 'description')
 
-# Shelter capacities
-shelters = {
-    'A': 200,
-    'B': 150,
-    'C': 250,
-    'H': 50,
-    'I': 50
-}
-nx.set_node_attributes(city_map, shelters, "capacity")
+############ K-Means Clustering Algorithm
 
-# Relief force deployment locations
-deployment_locations = {
-    'E': 30,  # Boat Rescue
-    'F': 40,  # Emergency Service
-    'G': 50,  # Supply Point
-    'H': 20,  # Staging Area
-    'I': 10   # Staging Area
-}
+######1
+def initialize_centroids(nodes, k): # initialize random Centroids
+    return random.sample(nodes, k) # fx randomly selects k(2, defined below) initial centroids
 
-# Function to determine optimal locations for supply points
-def find_optimal_supply_points(graph, deployment_locations, k):
-    # Extract coordinates of deployment locations
-    pos = nx.spring_layout(graph, seed=42)  # Using a spring layout for coordinates
-    deployment_coords = [pos[node] for node in deployment_locations.keys()]
-    weights = list(deployment_locations.values())
+######2
+# assign Nodes to Nearest Centroid
+def assign_clusters(graph, centroids): ## assigns each node to the closest centroid using the shortest path
+    clusters = {centroid: [] for centroid in centroids} #initializes a 'dictionary' clusters : will store the nodes assigned to each centroid
+    for node in graph.nodes(): #for ea node, 
+        if node not in centroids: 
+            distances = [nx.shortest_path_length(graph, node, centroid, weight='weight') for centroid in centroids] 
+            #calc shortest path to ea CENTROID (code above)
+            closest_centroid = centroids[distances.index(min(distances))] #assign shortest path from node to ea CENTROID 
+            #distances.index(min(distances) finds the centroid w smallest distance
+            clusters[closest_centroid].append(node) #add to cluster dict
+    return clusters
 
-    # Convert to numpy arrays for clustering
-    deployment_coords = np.array(deployment_coords)
-    weights = np.array(weights)
 
-    # Perform weighted K-Means clustering
-    kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)
-    kmeans.fit(deployment_coords, sample_weight=weights)
+######3
+#updates centroids : finding the node with the minimum average distance to others
+def update_centroids(graph, clusters):
+    new_centroids = [] #init empty list to store UPDATED centroids
+    for nodes in clusters.values(): #for ea node,
+        min_total_distance = float('inf') #init a variable : to keep track min total distance of a CLUSTER
+        best_node = None #init a variable : store the node that will become the new centroid for THIS clister.
+        for node in nodes: 
+            total_distance = sum(nx.shortest_path_length(graph, node, other, weight='weight') for other in nodes)
+            #calc total distance from the current node to all other nodes in the same cluster
+            # idea : FIND NODE IN THAT CLUSTER that MINIMIZES the total distance to all other nodes
+            if total_distance < min_total_distance:
+                min_total_distance = total_distance
+                #if the current total_distance is < min_total_distance(previously calc in fx bfr), update the minimum distance 
+                best_node = node
+        new_centroids.append(best_node) #once best node found, best node added to new_centroiids list
+        
+    return new_centroids
 
-    # Get the cluster centers (optimal supply points)
-    cluster_centers = kmeans.cluster_centers_
-    return cluster_centers
 
-# Determine 2 additional supply points
-additional_supply_points = find_optimal_supply_points(city_map, deployment_locations, k=2)
 
-# Visualize the supply points
-def visualize_supply_points(graph, deployment_locations, additional_points, title="Supply Points Visualization"):
-    pos = nx.spring_layout(graph, seed=42)  # Generate consistent layout
-    plt.figure(figsize=(12, 8))
+# run K-Means iteratively
+def k_means(graph, k=2, max_iter=10): #iterating 10 times, back from 1-3
+    nodes = list(graph.nodes()) #convert nodes to list
+    centroids = initialize_centroids(nodes, k) #CALLING fx 1 : initialize centroids
+    for _ in range(max_iter): #loop max_iter
+        clusters = assign_clusters(graph, centroids) #CALLING fx 2: assign nodes to closest centorids
+        new_centroids = update_centroids(graph, clusters) #CALLING fx 3:  update centroids based on the new clusters
+        if new_centroids == centroids: #if same, no iterations, break
+            break
+        centroids = new_centroids #
+    return clusters
 
-    # Draw the original graph
-    nx.draw_networkx_nodes(graph, pos, node_size=700, node_color="rosybrown")
-    nx.draw_networkx_edges(graph, pos, alpha=0.7)
+# apply K-Means Clustering
+clusters = k_means(G, k=2)
 
-    # Highlight deployment locations
-    deployment_pos = {node: pos[node] for node in deployment_locations.keys()}
-    nx.draw_networkx_nodes(graph, deployment_pos, node_size=800, node_color="lightblue")
+# Display the final centroids (selected supply points)
+final_centroids = list(clusters.keys()) #EXTRACTS list of centroids(keys frm 'clusters' dict)
+print(f"Selected Supply Points: {final_centroids}") #see on console, whoch final selections of centroids
 
-    # Add additional supply points
-    for point in additional_points:
-        plt.scatter(point[0], point[1], color="green", s=200, label="New Supply Point")
+# display distances from each supply point to its clustered nodes
+for centroid, nodes in clusters.items():
+    print(f"Distances from {centroid} to its clustered nodes:")
+    for node in nodes:
+        try:
+            distance = nx.shortest_path_length(G, source=centroid, target=node, weight='weight')
+            print(f"  {centroid} -> {node}: {distance}")
+        except nx.NetworkXNoPath:
+            print(f"  {centroid} -> {node}: No path found")
 
-    # Add labels
-    nx.draw_networkx_labels(graph, pos, font_size=10, font_color="black")
 
-    plt.title(title, fontsize=14)
-    plt.legend()
-    plt.axis("off")
-    plt.show()
+# Visualization
+pos = nx.spring_layout(G, seed=42)
 
-visualize_supply_points(city_map, deployment_locations, additional_supply_points)
+plt.figure(figsize=(10, 10))
 
-# Print results
-print("New Supply Points (Coordinates):")
-for i, point in enumerate(additional_supply_points, start=1):
-    print(f"Supply Point {i}: {point}")
+# gighlight centroids in yellow and other nodes in brown
+node_colors = ["yellow" if node in final_centroids else "rosybrown" for node in G.nodes]
+nx.draw_networkx_nodes(G, pos, node_size=800, node_color=node_colors)
+
+# add node labels with descriptions
+nx.draw_networkx_labels(G, pos, labels={node: f"{node}: {data.get('description', '')}" for node, data in G.nodes(data=True)}, font_size=8, font_color="navy")
+
+
+edge_colors = []
+for u, v, data in G.edges(data=True):
+    if any(u == centroid and v in clusters[centroid] or v == centroid and u in clusters[centroid] for centroid in final_centroids):
+        data['color'] = "green"  #GREEN AS CENTROIDS TO RELIEFS
+    else:
+        data['color'] = "lightgray"  
+
+
+edge_colors = [data.get("color", "lightgray") for _, _, data in G.edges(data=True)]
+nx.draw_networkx_edges(G, pos, edge_color=edge_colors, width=1.5)
+
+
+edge_labels = {(u, v): f"{int(d['weight'])}" for u, v, d in G.edges(data=True)}
+nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='black', font_size=8)
+
+plt.title("Graph with K-Means Clustering Supply Points Highlighted")
+plt.show()
+
+
+
+
+"""
+Time Complexity 
+
+FX 1 : uses random sample, k 
+Thus, O(k) complexity
+
+FX 2 : uses for ea nodes(n), centroids(k), also uses djikstra algo O(|E| + |V|log|V|))
+Thus now : O(n * k * (|E| + |V|log|V|)),
+|V| is number of vertices(nodes) and |E| is number of edges 
+
+FX 3 : uses ea cluster (k clusters, k =2), ea node in cluster (n/k), 
+ea other node in same cluster (n/k), + shortest path (djikstra)
+
+Thus now total complexity :
+O(k * (n/k) * (n/k) * (|E| + |V|log|V|)) = O(n² * (|E| + |V|log|V|)/k)
+
+Iteration fx : called all 3 fx above
+
+TOTAL TIME COMPLEXITY : 
+O(max_iter * (
+    n * k * (|E| + |V|log|V|) +                  
+    n² * (|E| + |V|log|V|)/k                     
+))
+
+where V = nodes, E = edges 
+
+"""
