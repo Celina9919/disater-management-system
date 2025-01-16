@@ -1,3 +1,24 @@
+"""
+BFS(Breadth-First Search) chosen
+
+Why? :
+- can easily handle multiple staging areas and deployment sites simultaneously
+-BFS explores all nodes at the current level before moving to the next level, 
+ensuring fair distribution of resources across deployment sites
+- The level-by-level approach makes it easy to implement 
+**priority-based** deployment when needed
+- BFS naturally finds the shortest paths between 
+staging areas and deployment sites
+
+Why not djikstra? :
+Overkill for this problem as we care more about:
+-num of hops (BFS is optimal for this)
+-avail capacity along paths
+-fair distribution of resources
+
+"""
+
+
 import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -191,6 +212,25 @@ for site, result in deployment_results.items():
 
 
 visualize_deployment(deployment_map, deployment_results)
+
+"""
+Time Complexity 
+
+FX 1 (bfs_deployment): uses ea node, ea edge
+Thus, O(V + E) or O(n + E)
+
+FX 2 (deploy_units) : 
+-uses iteration from deployment_needs, O(D), D = num of deployment sites 
+-uses iteration of SA , O(SA), SA = num of staging areas
+-combination : called bfs O(V + E) , path capacity O(P), P = path length,
+updates deployment details : O(P)
+
+TOTAL TIME COMPLEXITY : 
+O(D * S * ((V + E) + V)) = O(D * S * (2V +E))
+O(D * S * (2V +E)) = O(D * S * (V +E)) 
+- 2 ignore, Big O notation drop constants, doesnt care
+
+"""
 
 
 
