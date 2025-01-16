@@ -1,10 +1,18 @@
+"""
+Edmond-Karp : an implementation of the Ford-Fulkerson method 
+to calculate the maximum flow in a flow network
+- repeatedly finding augmenting paths in the residual graph 
+and pushing flow along them
+    
+"""
+
 import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
 
 def edmonds_karp(graph, source, sink):
     """
-    Implements Edmonds-Karp algorithm to find maximum flow in a network.
+    Implements Edmonds-Karp algorithm to find maximum flow in a network
     
     Args:
         graph (networkx.DiGraph): Directed graph with capacity attributes on edges
@@ -15,60 +23,103 @@ def edmonds_karp(graph, source, sink):
         flow_value (float): Maximum flow value
         flow_dict (dict): Dictionary of flows {(u,v): flow_value}
     """
+    
     def bfs(residual_graph, source, sink):
-        """Helper BFS function to find augmenting paths"""
+        """Helper BFS function to find augmenting paths
+        args : 
+        -residual_graph: The graph that tracks the available 
+        capacities (remaining capacities) of edges
+        - source
+        -sink
+        """
+        
         visited = {node: False for node in residual_graph.nodes()}
+        #init a dict : tracks whether each node has been visited during the BFS 
+        
         parent = {node: None for node in residual_graph.nodes()}
+        #init a dict : stores the parent node of each node in the path, i
+        # it helps reconstruct the augmenting path once the sink is reached
         
         queue = [source]
-        visited[source] = True
+        #FIFO queue that stores the nodes to be explored
+        #BFS algorithm processes nodes level-by-level, adding adjacent nodes to the queue as it visits them
         
-        while queue:
-            u = queue.pop(0)
+        visited[source] = True
+        #started BFS from source, mark as visited
+        
+        while queue: #core of BFS
+            u = queue.pop(0) #dequeue 1st node from queue
+            #u : current node being processed
+            
             for v in residual_graph.neighbors(u):
-                if not visited[v] and residual_graph[u][v]['capacity'] > 0:
-                    queue.append(v)
+                #returns the neighboring nodes v that are directly connected to u in residual graph 
+                #nodes that we can potentially send flow to
+                
+                if not visited[v] and residual_graph[u][v]['capacity'] > 0: #check if v is not visited
+                    #check if we can push flow through that edge (positive residual)
+                    queue.append(v) #add node v to the queue to explore it in subsequent steps
                     visited[v] = True
-                    parent[v] = u
+                    parent[v] = u #records that we reached v from u, used to reconstruct the path once the sink is reached 
                     
-                    if v == sink:
-                        path = []
+                    if v == sink: #if reach this, we found augmenting path
+                        #from source to sink
+                        path = [] #init list : to store nodes in path
                         current = sink
+                        #start from  sink node n trace back to the source using the parent dictionary
+                        #for ea node current, insert it at the beginning of the path list (path.insert(0, current))
                         while current is not None:
                             path.insert(0, current)
                             current = parent[current]
+                            #move to parent of current (current = parent[current]) 
+                            #until we reach the source (where current will be None)
+                            
                         return path
-        return None
+        return None #if no augmenting path
 
-    # Initialize residual graph and flow
-    residual_graph = graph.copy()
-    flow_dict = {(u,v): 0 for (u,v) in graph.edges()}
+
+
+#########MAIN FUNCTION LOGIC : EDMOND KARP
+    # init residual graph and flow
+    residual_graph = graph.copy() #create a copy of the original graph to work with
+    #residual graph tracks the remaining available capacity on each edge
+    flow_dict = {(u,v): 0 for (u,v) in graph.edges()} 
+    #dict : keeps track of the flow on each edge
     flow_value = 0
+    #tracks the total flow in the network
     
-    # Find augmenting paths and update flows
+    # find augmenting paths and update flows
     while True:
         path = bfs(residual_graph, source, sink)
+        #call the BFS function: find an augmenting path from the source to the sink
         if not path:
             break
             
         # Find minimum capacity in the path
-        path_flow = float('inf')
-        for i in range(len(path)-1):
+        path_flow = float('inf') #init store the minimum capacity along the path
+        for i in range(len(path)-1): # for ea pair of consecutive nodes (u, v) in the path, 
+            #check the capacity of the edge from u to v in the residual graph
+            
             u, v = path[i], path[i+1]
             path_flow = min(path_flow, residual_graph[u][v]['capacity'])
+            #update path_flow to be the minimum of the current path_flow and the residual capacity of the edge from u to v
+            #ensures that the flow we push along the path does not exceed the capacity of any edge in the path
         
-        # Update residual capacities and flows
+        # update residual capacities and flows
         for i in range(len(path)-1):
             u, v = path[i], path[i+1]
             flow_dict[(u,v)] = flow_dict.get((u,v), 0) + path_flow
+            #add flow path_flow to the existing flow on the edge (u, v)
             residual_graph[u][v]['capacity'] -= path_flow
+            #reduuce residual capacity of the edge (u, v) by path_flow since we are pushing flow along that edge
             
             # Add reverse edge if it doesn't exist
             if not residual_graph.has_edge(v, u):
-                residual_graph.add_edge(v, u, capacity=0)
+                residual_graph.add_edge(v, u, capacity=0) #if theres no already a reverse edge from v to u in the residual graph, 
+                #add it with zero capacity
             residual_graph[v][u]['capacity'] += path_flow
             
-        flow_value += path_flow
+        flow_value += path_flow #After processing the current augmenting path 
+        #add the path_flow to the total flow (flow_value)
     
     return flow_value, flow_dict
 
@@ -203,3 +254,24 @@ for (u, v) in city_map.edges():
 
 # Visualize the final flow
 visualize_evacuation_flow(city_map, all_flows)
+
+"""
+TIME COMPLEXITY 
+
+-BFS : O(|V| + |E|)
+
+- MAIN COMPLEXITY : 
+-Each time we find an augmenting path, we increase the flow by at least 1 unit
+-For each augmenting path found, at least one edge becomes saturated
+-Each edge can become saturated at most |V| times (proven by Edmonds and Karp)
+Thus, the maximum number of augmenting paths : O(|V|⋅|E|)
+
+Total Calc : 
+-Main loop runs O(|V|⋅|E|) times
+-each iteration performs a BFS taking O(|V| + |E|) time
+
+Total complexity: 
+O(|V|⋅|E|) * O(|V| + |E|) = O(|V|⋅|E|²)
+
+    
+"""
