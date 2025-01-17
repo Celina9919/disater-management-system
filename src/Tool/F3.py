@@ -83,7 +83,7 @@ def dijkstra(graph, start, target):
                 queue.append((distance, neighbor)) # Adds neighbors to the queue. It takes O(1) time.
 
     # Once the loop finishes, the algorithm reconstructs the shortest path from the target back to the start using the previous_nodes dictionary.
-    # This reconstruction step traces back the path, taking O(V) time.
+    # This reconstruction step traces back the path, taking O(E) time.
     path = []
     current = target
     while current is not None:
