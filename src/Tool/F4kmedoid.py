@@ -1,3 +1,19 @@
+"""
+K-Medoids is a clustering algorithm similar to K-Means but uses actual data points (medoids) as 
+cluster centers instead of the mean. 
+- The algorithm works by initializing k medoids, assigning each data point to the nearest medoid, 
+and then iteratively updating the medoids by minimizing the total distance within each cluster.
+
+why: 
+- good at finding the best places to put resources (like supply points) on a map, 
+especially when some paths might be blocked or have extra difficulty, like waterways
+- works by starting with random spots, checking which ones work best, 
+and improving the spots until find the best ones.
+-works directly with the nodes on the graph : ensuring that the center points (medoids) 
+are real, existing locations on our map. 
+
+"""
+
 import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
