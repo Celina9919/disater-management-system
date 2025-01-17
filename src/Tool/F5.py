@@ -91,6 +91,14 @@ deployment_details = {(u, v): 0 for u, v in deployment_map.edges()}
 # calc total available capacity from staging areas
 total_staging_capacity = sum(staging_areas.values())
 
+if deployment_map.has_edge('F', 'E'):
+    deployment_map['F']['E']['type'] = 'Impassable'
+    deployment_map['E']['F']['type'] = 'Impassable'  
+
+if deployment_map.has_edge('E', 'I'):
+    deployment_map['E']['I']['type'] = 'Waterway'
+    deployment_map['I']['E']['type'] = 'Waterway'
+
 ########BFS
 def bfs_deployment(graph, start_node, target_node, required_units):
     """
@@ -103,6 +111,9 @@ def bfs_deployment(graph, start_node, target_node, required_units):
     while queue: #while nodes to explore, the fx DEQUEUES node and look at al connected neighbours
         (vertex, path) = queue.pop(0) #dequeues
         for next_node in set(graph[vertex]) - visited: #for next node of current node, if not visited, add to queue
+            # Skip edges marked as 'Impassable'
+            if graph[vertex][next_node].get('type') == 'Impassable':
+                continue
             if next_node == target_node: #return
                 return path + [next_node]
             queue.append((next_node, path + [next_node]))
@@ -166,8 +177,18 @@ def visualize_deployment(graph, deployment_results, title="Emergency Services De
     
     edge_colors = []
     edge_widths = []
+    edge_labels = {}
+    
     for u, v, data in graph.edges(data=True):
-        if (u, v) in routes or (v, u) in routes:
+        if data.get('type') == 'Impassable':  # Impassable edge
+            edge_colors.append('black')
+            edge_widths.append(3)
+            edge_labels[(u, v)] = 'Impassable'
+        elif data.get('type') == 'Waterway':  # Waterway edge
+            edge_colors.append('blue')
+            edge_widths.append(2)
+            edge_labels[(u, v)] = 'Waterway'
+        elif (u, v) in routes or (v, u) in routes:  # Regular deployment routes
             edge_colors.append('red')
             edge_widths.append(2)
         else:
