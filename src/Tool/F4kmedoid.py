@@ -90,8 +90,17 @@ def custom_dijkstra(graph, start, impassables, waterways): #djikstra to find sho
     return distances
 
 ######2
-def initialize_medoids(nodes, k): # initialize random Medoids
-    return random.sample(nodes, k) # fx randomly selects k(2, defined below) initial medoids
+def initialize_medoids(nodes, k, existing_supply_point=None): # initialize random Medoids
+    # Ensure that existing supply point (node G) is always selected as one medoid
+    if existing_supply_point:
+        medoids = [existing_supply_point]
+        # Randomly select remaining (k-1) medoids from the rest of the nodes
+        remaining_nodes = [node for node in nodes if node != existing_supply_point]
+        medoids += random.sample(remaining_nodes, k - 1)
+    else:
+        # If no fixed node, select k random medoids from all nodes
+        medoids = random.sample(nodes, k)
+    return medoids
 
 ######3
 def assign_clusters(graph, medoids, impassables, waterways): ## assigns each node to the closest medoid using custom Dijkstra
@@ -154,7 +163,7 @@ def calculate_total_cost(graph, clusters, medoids, impassables, waterways): #fx 
     return total_cost
 
 ####6 : run K-Medoids iteratively
-def k_medoids(graph, k=2, max_iter=10, num_trials=5, obstacles=[], waterways=[]): #iterating 10 times, back from 1-4
+def k_medoids(graph, k=2, max_iter=10, num_trials=5, obstacles=[], waterways=[], existing_supply_point="G"): #iterating 10 times, back from 1-4
     #Try 5 different random starting points (num_trials=5)
     
     nodes = list(graph.nodes())
@@ -164,7 +173,7 @@ def k_medoids(graph, k=2, max_iter=10, num_trials=5, obstacles=[], waterways=[])
     for trial in range(num_trials):  # do everything 5 times!
         # try one random solution
         
-        current_medoids = initialize_medoids(nodes, k)
+        current_medoids = initialize_medoids(nodes, k, existing_supply_point)
         current_clusters = None
         current_cost = float('inf')
     
