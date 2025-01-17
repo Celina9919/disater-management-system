@@ -84,18 +84,21 @@ def prim_algorithm(G, start_node):
         
     Returns:
         mst_edges (list): List of edges in the MST.
+        mst_nodes (set): Set of nodes included in the MST.
         total_cost (int): Total weight of the MST.
     """
     mst_edges = []  # List to store the edges that make up the MST
+    mst_nodes = set()  # Set to track nodes involved in the MST
     visited = set()  # Set to track visited nodes
     min_heap = []  # Min-Heap (priority queue) to store edges (weight, node(start_node), neighbor)
 
     # Mark the start node as visited and add its edges to the heap
     visited.add(start_node)                      # Mark the start node as visited
+    mst_nodes.add(start_node)                    # Add the start node to MST nodes set
     for neighbor, data in G[start_node].items(): # Add edges of the start node to the Min-Heap
         heapq.heappush(min_heap, (data['weight'], start_node, neighbor)) # Push edges of the start node to the Min-Heap
 
-    # Run Prim's algorithm : Extract edges from the Min-Heap and add them to the MST
+    # Run Prim's algorithm: Extract edges from the Min-Heap and add them to the MST
     while min_heap:
         weight, node, neighbor = heapq.heappop(min_heap) # Get the edge with the smallest weight and Pop the smallest edge from the heap
 
@@ -103,25 +106,32 @@ def prim_algorithm(G, start_node):
         if neighbor not in visited:
             visited.add(neighbor) # Mark the neighbor as visited
             mst_edges.append((node, neighbor, weight)) # Add the edge to the MST
+            mst_nodes.add(neighbor)  # Add the neighbor node to the MST nodes set
 
             # Add all edges of the newly added node to the Min-Heap for future consideration
-            # This step ensures that we evaluate all possible edges connecting the new node to any other unvisited nodes.
             for next_neighbor, data in G[neighbor].items():
                 if next_neighbor not in visited:
                     heapq.heappush(min_heap, (data['weight'], neighbor, next_neighbor)) # Push edge to the heap
 
     # Calculate the total weight (cost) of the MST
-    # This step sums up the weights of all edges in the MST to determine the total cost of constructing the minimum spanning tree.
     total_cost = sum(weight for _, _, weight in mst_edges)
 
-    return mst_edges, total_cost
+    return mst_edges, mst_nodes, total_cost
 
 # Run Prim's algorithm starting from node 'A'
 start_node = 'A'
-mst_edges, minimum_cost = prim_algorithm(G, start_node)
+mst_edges, mst_nodes, minimum_cost = prim_algorithm(G, start_node)
 
 # Print the total minimum cost of the MST (rebuilding infrastructure)
 print(f"The minimum cost to rebuild the infrastructure of Schilda city is: {minimum_cost}")
+
+# Print the nodes involved in the MST
+print(f"Nodes involved in the MST: {mst_nodes}")
+
+# Print the edges in the MST
+print("Minimum Spanning Tree (MST) edges:")
+for u, v, weight in mst_edges:
+    print(f"Edge: {u} - {v}, Repair cost: {weight}")
 
 # Create the MST graph
 mst = nx.Graph()
