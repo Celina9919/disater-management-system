@@ -82,4 +82,85 @@ class DisasterManagementTool:
         for i, row in enumerate(self.city_map):
             print(f"{self.node_labels[i]}  ", " ".join(map(str, row))) # Print each row with node label
             
+if __name__ == "__main__":
+    # create instance for unweighted directed graph
+    tool_unweighted = DisasterManagementTool(graph_type="directed_unweighted")
+    
+    directed_unweighted_matrix = [
+        #A, B, C, D, E, F, G, H, I, J
+        [0, 1, 0, 0, 1, 0, 1, 1, 0, 1], # A
+        [1, 0, 0, 0, 1, 0, 0, 0, 0, 0], # B
+        [1, 0, 0, 1, 0, 0, 1, 1, 0, 0], # C
+        [1, 0, 1, 0, 1, 0, 0, 0, 0, 0], # D
+        [0, 1, 0, 0, 1, 1, 0, 0, 0, 0], # E
+        [0, 1, 0, 0, 1, 0, 0, 0, 0, 1], # F
+        [1, 1, 1, 0, 0, 0, 0, 1, 1, 0], # G
+        [0, 0, 0, 1, 1, 0, 0, 0, 0, 0], # H
+        [0, 0, 0, 0, 0, 0, 1, 1, 1, 0], # I
+        [1, 0, 0, 0, 0, 0, 0, 0, 1, 0]  # J
+    ]
+    
+    # Load and display unweighted map
+    tool_unweighted.load_city_map(directed_unweighted_matrix)
+    tool_unweighted.print_adjacency_matrix()
+    tool_unweighted.display_city_map()
 
+    tool_weighted = DisasterManagementTool(graph_type="directed_weighted")
+    
+    directed_weighted_matrix = [
+        #A, B, C, D, E, F, G, H, I, J
+        [0, 20, 5, 7, 7, 15, 25, 6, 23],   # A
+        [20, 0, 34, 25, 15, 10, 4, 7, 16], # B
+        [5, 34, 0, 20, 27, 10, 8, 12, 15], # C
+        [7, 25, 20, 0, 3, 8, 9, 20, 7],    # D
+        [7, 15, 27, 3, 0, 27, 23, 25, 0],  # E
+        [15, 10, 10, 8, 27, 0, 3, 7, 21],  # F
+        [25, 4, 8, 9, 23, 3, 0, 17, 6],    # G
+        [6, 7, 12, 20, 25, 7, 17, 0, 30],  # H
+        [23, 16, 15, 7, 5, 21, 6, 30, 0]   # I
+    ]
+    
+    tool_weighted.load_city_map(directed_weighted_matrix)
+    tool_weighted.print_adjacency_matrix()
+    tool_weighted.display_city_map()
+    
+    tool_weighted = DisasterManagementTool(graph_type="undirected_unweighted")
+    
+    undirected_unweighted_matrix = [
+        #A, B, C, D, E, F, G, H, I, J
+        [0, 1, 1, 1, 0, 0, 1, 0, 0, 1], # A
+        [1, 0, 0, 0, 1, 1, 1, 0, 0, 0], # B
+        [1, 0, 0, 1, 0, 0, 1, 0, 0, 0], # C
+        [1, 0, 1, 0, 0, 0, 0, 1, 0, 0], # D
+        [0, 1, 0, 0, 0, 1, 0, 1, 0, 0], # E
+        [0, 1, 0, 0, 1, 0, 0, 0, 0, 0], # F
+        [1, 1, 1, 0, 0, 0, 0, 0, 1, 0], # G
+        [0, 0, 0, 1, 1, 0, 0, 0, 1, 0], # H
+        [0, 0, 0, 0, 0, 0, 1, 1, 0, 1], # I
+        [1, 0, 0, 0, 0, 0, 0, 0, 1, 0]  # J
+    ]
+    
+    tool_weighted.load_city_map(undirected_unweighted_matrix)
+    tool_weighted.print_adjacency_matrix()
+    tool_weighted.display_city_map()
+    
+    
+    tool_weighted = DisasterManagementTool(graph_type="undirected_weighted")
+    
+    undirected_weighted_matrix = [
+        #A, B, C, D, E, F, G, H, I, J
+        [0, 1, 1, 1, 0, 0, 1, 0, 0, 1],     # A
+        [1, 0, 0, 0, 6, 2, 8, 0, 0, 0],     # B
+        [1, 0, 0, 1, 0, 0, 1, 0, 0, 0],     # C
+        [1, 0, 1, 0, 0, 0, 0, 1, 0, 0],     # D
+        [0, 6, 0, 0, 0, 1, 0, 13, 0, 0],    # E
+        [0, 2, 0, 0, 1, 0, 0, 0, 0, 0],     # F
+        [1, 8, 1, 0, 0, 0, 0, 0, 2, 0],     # G
+        [0, 0, 0, 1, 13, 0, 0, 0, 9, 0],    # H
+        [0, 0, 0, 0, 0, 0, 2, 9, 0, 2],     # I
+        [1, 0, 0, 0, 0, 0, 0, 0, 2, 0]      # J
+    ]
+    
+    tool_weighted.load_city_map(undirected_weighted_matrix)
+    tool_weighted.print_adjacency_matrix()
+    tool_weighted.display_city_map()
