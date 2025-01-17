@@ -143,6 +143,20 @@ node_labels = {node: f"{node}: {data['description']}" for node, data in G.nodes(
 # Generate labels for edges to show their type and weight
 edge_labels = {(u, v): f"{data['type']} ({data.get('weight', 0)})" for u, v, data in G.edges(data=True)}
 
+for u, v in G.edges():
+    if ('E' in {u, v}) and ('I' in {u, v}):  # Check if the edge connects E and I
+        G.edges[u, v]["type"] = "Waterway"
+        G.edges[u, v]["color"] = "blue"
+    elif ('F' in {u, v}) and ('E' in {u, v}):  # Check if the edge connects F and E
+        G.edges[u, v]["type"] = "Impassable"
+        G.edges[u, v]["color"] = "red"
+    else:
+        G.edges[u, v]["color"] = "lightgray"  # Color normal edges light gray
+        G.edges[u, v]["type"] = " "          # No specific type for other edges
+
+# Generate labels for edges to include their type and weight
+edge_labels = {(u, v): f"{data['type']} ({data.get('weight', 0)})" for u, v, data in G.edges(data=True)}
+
 # Visualization of the graph and MST
 pos = nx.spring_layout(G, seed=42)  # Layout for consistent node placement across runs
 plt.figure(figsize=(12, 12)) # Set the figure size for better readability
@@ -158,7 +172,8 @@ edge_colors = [data["color"] for _, _, data in G.edges(data=True)]
 nx.draw_networkx_edges(G, pos, edge_color=edge_colors, width=1)
 
 # Draw MST edges on top to highlight them in red
-nx.draw_networkx_edges(mst, pos, edge_color="red", width=3)
+nx.draw_networkx_edges(mst, pos, edge_color="green", width=3)
+
 
 # Add edge labels for the attributes such as type and weight
 nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=6, font_color="black", font_family="monospace")
