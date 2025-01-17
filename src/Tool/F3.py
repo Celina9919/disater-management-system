@@ -151,6 +151,7 @@ nx.draw_networkx_labels(G, pos, labels={node: f"{node}: {data['description']}" f
 edge_colors = [data["color"] for _, _, data in G.edges(data=True)]
 nx.draw_networkx_edges(G, pos, edge_color=edge_colors, width=1)
 
+
 # Draw edge weights
 edge_labels = {(u, v): f"{d['weight']}" for u, v, d in G.edges(data=True)}
 
@@ -159,6 +160,12 @@ for node, path in paths_to_target.items():
         path_edges = [(path[i], path[i + 1]) for i in range(len(path) - 1)]
         nx.draw_networkx_edges(G, pos, edgelist=path_edges, edge_color="olivedrab", width=2.5)
         edge_labels.update({(path[i], path[i + 1]): f"{G[path[i]][path[i + 1]]['weight']}" for i in range(len(path) - 1)})
+        
+edge_labels.update({(u, v): 'Waterway' for u, v in G.edges() if G.edges[u, v].get("type") == "Waterway"})
+
+if G.has_edge('F', 'E'):
+    edge_labels[('F', 'E')] = 'Impassable'
+    edge_labels[('E', 'F')] = 'Impassable'
 
 # Put edge labels to ensure highlighted paths have their weights shown
 nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='black', font_size=8)
