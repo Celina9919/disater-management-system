@@ -29,8 +29,8 @@ nx.set_node_attributes(G, node_attributes, 'description')
 
 ############ K-Medoids Algorithm
 
-######1
-def custom_dijkstra(graph, start): #djikstra to find shortest paths from starting node to all other nodes in the graph
+######1 DJIKSTRA + CONSIDERING WATERWAYS, IMPASSABLES
+def custom_dijkstra(graph, start, impassables, waterways): #djikstra to find shortest paths from starting node to all other nodes in the graph
     distances = {node: float('inf') for node in graph.nodes()}
     #dict : store the shortest distance to each node
     
@@ -51,8 +51,16 @@ def custom_dijkstra(graph, start): #djikstra to find shortest paths from startin
         
         for neighbor in graph.neighbors(current_node): #iterates all neighbouring node
             if neighbor not in visited:
-                weight = graph.edges[current_node, neighbor]['weight']
+                weight = graph.edges[current_node, neighbor].get('weight', 1)
                 #retrieves weight/distance btw current_node n its neighbour 
+                
+                # penalize impassable obstacles (add weight = infinity on impassables, so that its path wont be shortest)
+                if (current_node, neighbor) in impassables or (neighbor, current_node) in impassables:
+                    weight = float('inf')  # impassable 
+                
+                # penalize waterways with additional weight (add weight  = +10, so that it wont be shortest)
+                if (current_node, neighbor) in waterways or (neighbor, current_node) in waterways:
+                    weight += 10  # waterway 
                 
                 distance = current_distance + weight
                 #calc POTENTIAL new shortest dist to neighbour
@@ -70,9 +78,9 @@ def initialize_medoids(nodes, k): # initialize random Medoids
     return random.sample(nodes, k) # fx randomly selects k(2, defined below) initial medoids
 
 ######3
-def assign_clusters(graph, medoids): ## assigns each node to the closest medoid using custom Dijkstra
+def assign_clusters(graph, medoids, impassables, waterways): ## assigns each node to the closest medoid using custom Dijkstra
     clusters = {medoid: [] for medoid in medoids} #initializes a 'dictionary' clusters : will store the nodes assigned to each medoid
-    medoid_distances = {medoid: custom_dijkstra(graph, medoid) for medoid in medoids} #dict : where keys r medoids, and values are results of running
+    medoid_distances = {medoid: custom_dijkstra(graph, medoid,impassables, waterways) for medoid in medoids} #dict : where keys r medoids, and values are results of running
     
     for node in graph.nodes(): #for ea node
         if node not in medoids: #skip nodes that r medoids
@@ -88,7 +96,7 @@ def assign_clusters(graph, medoids): ## assigns each node to the closest medoid 
     return clusters
 
 ######4
-def update_medoids(graph, clusters): # updates medoids by finding node with minimum total distance in each cluster
+def update_medoids(graph, clusters,impassables, waterways): # updates medoids by finding node with minimum total distance in each cluster
     new_medoids = [] #init empty list to store UPDATED medoids
     for medoid, nodes in clusters.items(): #for ea cluster
         
@@ -102,7 +110,7 @@ def update_medoids(graph, clusters): # updates medoids by finding node with mini
         #init variable : store the best medoid
         
         for node in cluster_nodes:
-            distances = custom_dijkstra(graph, node)
+            distances = custom_dijkstra(graph, node, impassables, waterways)
             #calc shortest paths from current node to all other nodes
             
             total_distance = sum(distances[other] for other in cluster_nodes if other != node)
@@ -119,16 +127,18 @@ def update_medoids(graph, clusters): # updates medoids by finding node with mini
         new_medoids.append(best_node)
     return new_medoids
 
-def calculate_total_cost(graph, clusters, medoids): #fx calc sum of shortest distances of a clustering solution 
+
+######5
+def calculate_total_cost(graph, clusters, medoids, impassables, waterways): #fx calc sum of shortest distances of a clustering solution 
     total_cost = 0 #store total dist 
     for medoid, cluster_nodes in clusters.items():
-        distances = custom_dijkstra(graph, medoid) #call fx1 : retrieve shortest dist from current medoid to other nodes
+        distances = custom_dijkstra(graph, medoid, impassables, waterways) #call fx1 : retrieve shortest dist from current medoid to other nodes
         total_cost += sum(distances[node] for node in cluster_nodes)
         #sum distances from medoid to its cluster nodes and adds to total_cost
     return total_cost
 
-# run K-Medoids iteratively
-def k_medoids(graph, k=2, max_iter=10, num_trials=5): #iterating 10 times, back from 1-4
+####6 : run K-Medoids iteratively
+def k_medoids(graph, k=2, max_iter=10, num_trials=5, obstacles=[], waterways=[]): #iterating 10 times, back from 1-4
     #Try 5 different random starting points (num_trials=5)
     
     nodes = list(graph.nodes())
@@ -143,9 +153,9 @@ def k_medoids(graph, k=2, max_iter=10, num_trials=5): #iterating 10 times, back 
         current_cost = float('inf')
     
     for _ in range(max_iter):
-        new_clusters = assign_clusters(graph, current_medoids) #CALLING fx 3: assign nodes to closest medoids
-        new_medoids = update_medoids(graph, new_clusters) #CALLING fx 4: update medoids based on new clusters
-        new_cost = calculate_total_cost(graph, new_clusters, new_medoids)
+        new_clusters = assign_clusters(graph, current_medoids, obstacles, waterways) #CALLING fx 3: assign nodes to closest medoids
+        new_medoids = update_medoids(graph, new_clusters, obstacles, waterways) #CALLING fx 4: update medoids based on new clusters
+        new_cost = calculate_total_cost(graph, new_clusters, new_medoids, obstacles, waterways)
         
         if new_cost >= current_cost: #if cost not improving, stop
             break
@@ -162,8 +172,11 @@ def k_medoids(graph, k=2, max_iter=10, num_trials=5): #iterating 10 times, back 
     print(f"Best solution found with total cost: {best_cost}")
     return best_clusters
 
+obstacles = [("F", "E")]  # F-E is impassable
+waterways = [("E", "I")]  # E-I is a waterway
+
 # apply K-Medoids Clustering
-clusters = k_medoids(G, k=2, num_trials=5)
+clusters = k_medoids(G, k=2, num_trials=5, obstacles=obstacles, waterways=waterways)
 
 # Display the final medoids (selected supply points)
 final_medoids = list(clusters.keys())
@@ -173,7 +186,7 @@ print(f"Selected Supply Points: {final_medoids}")
 for medoid, nodes in clusters.items():
     print(f"Distances from {medoid} to its clustered nodes:")
     for node in nodes:
-        distances = custom_dijkstra(G, medoid)
+        distances = custom_dijkstra(G, medoid, obstacles, waterways)
         print(f"  {medoid} -> {node}: {distances[node]}")
 
 # Visualization
@@ -191,11 +204,16 @@ nx.draw_networkx_labels(G, pos, labels={node: f"{node}: {data.get('description',
 
 edge_colors = []
 for u, v, data in G.edges(data=True):
-    if any(u == medoid and v in clusters[medoid] or 
-           v == medoid and u in clusters[medoid] for medoid in final_medoids):
-        data['color'] = "green"  #GREEN AS MEDOIDS TO RELIEFS
+    if (u, v) in waterways or (v, u) in waterways:
+        data['color'] = "blue"  # waterways
+    elif (u, v) in obstacles or (v, u) in obstacles:
+        data['color'] = "red"  #  impassable 
+    elif any(u == medoid and v in clusters[medoid] or 
+             v == medoid and u in clusters[medoid] for medoid in final_medoids):
+        data['color'] = "green"  # GREEN FOR MEDOIDS
     else:
         data['color'] = "lightgray"  
+         
 
 edge_colors = [data.get("color", "lightgray") for _, _, data in G.edges(data=True)]
 nx.draw_networkx_edges(G, pos, edge_color=edge_colors, width=1.5)
