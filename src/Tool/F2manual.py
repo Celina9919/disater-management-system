@@ -155,6 +155,15 @@ def visualize_evacuation_flow(graph, flow_dict, title="Evacuation Flow Visualiza
             node_labels[node] = f"{node}: {description}"
 
     nx.draw_networkx_labels(graph, pos, labels=node_labels, font_size=10, font_color="black")
+    
+    edge_labels = {}
+    for u, v in graph.edges():
+        if (u == 'F' and v == 'E') or (u == 'E' and v == 'F'):
+            edge_labels[(u, v)] = 'Impassable'  # Label for impassable edge
+        elif (u == 'E' and v == 'I') or (u == 'I' and v == 'E'):
+            edge_labels[(u, v)] = 'Waterway'  # Label for waterway edge
+
+    nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels, font_color="black", font_size=10)
 
     # Add edge labels
     edge_labels = {}
