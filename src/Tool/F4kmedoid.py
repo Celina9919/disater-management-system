@@ -128,11 +128,15 @@ def calculate_total_cost(graph, clusters, medoids): #fx calc sum of shortest dis
     return total_cost
 
 # run K-Medoids iteratively
-def k_medoids(graph, k=2, max_iter=10): #iterating 10 times, back from 1-4
+def k_medoids(graph, k=2, max_iter=10, num_trials=5): #iterating 10 times, back from 1-4
     nodes = list(graph.nodes())
-    current_medoids = initialize_medoids(nodes, k) #CALLING fx 2: initialize medoids
-    current_clusters = None
-    current_cost = float('inf')
+    best_clusters = None
+    best_cost = float('inf')
+    
+    for trial in range(num_trials):  # Run multiple trials with different initializations
+        current_medoids = initialize_medoids(nodes, k)
+        current_clusters = None
+        current_cost = float('inf')
     
     for _ in range(max_iter):
         new_clusters = assign_clusters(graph, current_medoids) #CALLING fx 3: assign nodes to closest medoids
@@ -146,10 +150,16 @@ def k_medoids(graph, k=2, max_iter=10): #iterating 10 times, back from 1-4
         current_clusters = new_clusters
         current_cost = new_cost
         
-    return current_clusters
+        # Update best solution if current solution is better
+        if current_cost < best_cost:
+            best_cost = current_cost
+            best_clusters = current_clusters
+            
+    print(f"Best solution found with total cost: {best_cost}")
+    return best_clusters
 
 # apply K-Medoids Clustering
-clusters = k_medoids(G, k=2)
+clusters = k_medoids(G, k=2, num_trials=5)
 
 # Display the final medoids (selected supply points)
 final_medoids = list(clusters.keys())
