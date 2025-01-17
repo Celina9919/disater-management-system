@@ -92,11 +92,13 @@ if __name__ == "__main__":
     ]
     
     # Test the directed_unweighted_graph for basic function 1 (display graph)
-    test_graph(directed_unweighted_matrix, "directed_unweighted")
+    #test_graph(directed_unweighted_matrix, "directed_unweighted")
+    
+    
 
     # Test the directed_unweighted_graph for basic function 2 (modify and update graph)
-    tool = DisasterManagementTool("directed_unweighted") # Create an instance of the tool with a specific graph type
-    tool.load_city_map(directed_unweighted_matrix, node_labels) # Load the adjacency matrix into the tool
+    tool = DisasterManagementTool("directed_weighted") # Create an instance of the tool with a specific graph type
+    tool.load_city_map(directed_weighted_matrix, node_labels) # Load the adjacency matrix into the tool
     add_new_features(tool)  # Add important points, impassable roads, and road types
     tool.print_adjacency_matrix() # Print the updated adjacency matrix
     tool.display_city_map() # Display the modified graph

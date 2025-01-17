@@ -175,6 +175,7 @@ Time Complexity of Prim's Algorithm:
 As E>V in a complete graphs, the overall complexity simplifies to: O(ElogV)
 In this case, for the given graph with 9 nodes (V=9), and 36 edges (E=36) in a Complete graph <= (9*(9-1))/2 = 36.
 Complexity: O(36log9)=O(36*3)=O(108)
+
 """
 
 #References: https://www.geeksforgeeks.org/difference-between-prims-and-kruskals-algorithm-for-mst/ this our code for function 1: F1: Rebuilding the communication infrastructure

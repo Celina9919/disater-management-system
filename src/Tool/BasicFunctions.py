@@ -104,7 +104,7 @@ class DisasterManagementTool:
                         G.add_edge(self.node_labels[i], self.node_labels[j])
                         
         # Graph layout
-        pos = nx.spring_layout(G, k=2.5) # Layout for visualization (the looks for the graph)
+        pos = nx.spring_layout(G, k=8) # Layout for visualization (the looks for the graph)
         plt.figure(figsize=(8, 6), num=self.graph_type) # Combine figure size and title
         
         edge_colors = []  # Set roads/edges colors to differentiate to differentiate
