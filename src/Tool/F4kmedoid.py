@@ -129,11 +129,15 @@ def calculate_total_cost(graph, clusters, medoids): #fx calc sum of shortest dis
 
 # run K-Medoids iteratively
 def k_medoids(graph, k=2, max_iter=10, num_trials=5): #iterating 10 times, back from 1-4
+    #Try 5 different random starting points (num_trials=5)
+    
     nodes = list(graph.nodes())
     best_clusters = None
-    best_cost = float('inf')
+    best_cost = float('inf') # keep track of which try gave us the lowest total distance
     
-    for trial in range(num_trials):  # Run multiple trials with different initializations
+    for trial in range(num_trials):  # do everything 5 times!
+        # try one random solution
+        
         current_medoids = initialize_medoids(nodes, k)
         current_clusters = None
         current_cost = float('inf')
@@ -150,7 +154,7 @@ def k_medoids(graph, k=2, max_iter=10, num_trials=5): #iterating 10 times, back 
         current_clusters = new_clusters
         current_cost = new_cost
         
-        # Update best solution if current solution is better
+        # if this try is better than our best so far, save it
         if current_cost < best_cost:
             best_cost = current_cost
             best_clusters = current_clusters
