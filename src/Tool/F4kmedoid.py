@@ -66,7 +66,9 @@ def custom_dijkstra(graph, start): #djikstra to find shortest paths from startin
     return distances
 
 ######2
+# Initialize medoids randomly (excluding G)
 def initialize_medoids(nodes, k): # initialize random Medoids
+    nodes = [node for node in nodes if node != 'G']
     return random.sample(nodes, k) # fx randomly selects k(2, defined below) initial medoids
 
 ######3
