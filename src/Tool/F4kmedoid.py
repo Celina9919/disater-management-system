@@ -90,13 +90,13 @@ def custom_dijkstra(graph, start, impassables, waterways): #djikstra to find sho
     return distances
 
 ######2
-def initialize_medoids(nodes, k, existing_supply_point=None): # initialize random Medoids
+def initialize_medoids(nodes, k, existing_supply_point='G'): # initialize random Medoids
     # Ensure that existing supply point (node G) is always selected as one medoid
     if existing_supply_point:
         medoids = [existing_supply_point]
         # Randomly select remaining (k-1) medoids from the rest of the nodes
         remaining_nodes = [node for node in nodes if node != existing_supply_point]
-        medoids += random.sample(remaining_nodes, k - 1)
+        medoids += random.sample(remaining_nodes, k)
     else:
         # If no fixed node, select k random medoids from all nodes
         medoids = random.sample(nodes, k)
