@@ -1,3 +1,23 @@
+"""
+BFS(Breadth-First Search) chosen
+
+Why? :
+- can easily handle multiple staging areas and deployment sites simultaneously
+-BFS explores all nodes at the current level before moving to the next level, 
+ensuring fair distribution of resources across deployment sites
+- The level-by-level approach makes it easy to implement 
+**priority-based** deployment when needed
+- BFS naturally finds the shortest paths between 
+staging areas and deployment sites
+
+Why not djikstra? :
+Overkill for this problem as we care more about:
+-num of hops (BFS is optimal for this)
+-avail capacity along paths
+-fair distribution of resources
+
+"""
+
 import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
