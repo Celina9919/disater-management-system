@@ -237,22 +237,31 @@ Time Complexity
 
 FX 1 (custom_dijkstra) : O(E log V) where E is edges and V is vertices
 
-FX 2 : uses random sample, k 
-Thus, O(k) complexity
+FX 2 :  nested loops to try all possible combinations of 2 additional points
+- for n nodes, O(n²) combinations
+- combination : assign_clusters: O(kV + kE log V), calculate_total_cost: O(kE log V)
+- Total complexity: O(n² * (kV + kE log V)), where k =3
+- Final : O(n² * (V + E log V))
 
 FX 3 : calculates dijkstra for each medoid (k * E log V) and then 
-assigns each node (n) to closest medoid by checking all medoids (k)
-Thus, O(k * E log V + n * k)
+- for ea node, find closest medoid: O(kV)
+- Final: O(kE log V + kV), where k =3
 
-FX 4 : for each cluster (k), calculate dijkstra for each node in cluster (n/k * E log V)
-and sum distances to all other nodes in cluster (n/k)
-Thus, O(k * (n/k * E log V * n/k)) = O(n² * E log V / k)
+FX 4 : - call custom_dijkstra(fx1) for each medoid: O(kE log V)
+- for ea clushter : sums distances: O(V)
+- Final : O(kE log V + V)
+
+FX 5 : - initialize_medoids once: O(n² * (V + E log V))
+- make on final assignment of clusters: O(kE log V + kV)
 
 TOTAL TIME COMPLEXITY for one iteration: 
-O(k + k * E log V + n * k + n² * E log V / k)
+- max_iter : 10, k =3 --> dont affcet big O
+- Final : O(n² * (V + E log V))
 
-For max_iter iterations:
-O(max_iter * (k + k * E log V + n * k + n² * E log V / k))
+DOMINANT FACTOR :  
+- initialize_medoids FX1: tries all possible combinations of additional supply points
+- fixed node G + additional points :  O(n²) combinations
+- for ea combination: calc distances and costs using Dijkstra's algorithm
 
 where:
 V = vertices (nodes)
