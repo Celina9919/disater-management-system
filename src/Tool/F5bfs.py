@@ -200,10 +200,19 @@ def visualize_deployment(graph, deployment_results, title="Emergency Services De
     for node, data in graph.nodes(data=True):
         description = data.get('description', '')
         capacity = data.get('capacity', '')
+        node_label = f"{node}: {description}"
+        
+        # Add deployment needs and skills if the node is a deployment site
+        if node in deployment_needs:
+            needed_units = deployment_needs[node]['units']
+            skills_needed = ", ".join(deployment_needs[node]['skills'])
+            node_label += f"\nNeeded: {needed_units} units\nSkills: {skills_needed}"
+        
         if capacity:
-            node_labels[node] = f"{node}: {description}\n{capacity}"
-        else:
-            node_labels[node] = f"{node}: {description}"
+            node_label += f"\nCapacity: {capacity}"
+        
+        node_labels[node] = node_label
+
     
     nx.draw_networkx_labels(graph, pos, labels=node_labels, font_size=8)
     
