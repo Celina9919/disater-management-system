@@ -1,24 +1,3 @@
-"""
-BFS(Breadth-First Search) chosen
-
-Why? :
-- can easily handle multiple staging areas and deployment sites simultaneously
--BFS explores all nodes at the current level before moving to the next level, 
-ensuring fair distribution of resources across deployment sites
-- The level-by-level approach makes it easy to implement 
-**priority-based** deployment when needed
-- BFS naturally finds the shortest paths between 
-staging areas and deployment sites
-
-Why not djikstra? :
-Overkill for this problem as we care more about:
--num of hops (BFS is optimal for this)
--avail capacity along paths
--fair distribution of resources
-
-"""
-
-
 import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -55,15 +34,15 @@ nx.set_node_attributes(deployment_map, node_attributes, "description")
 
 # how many units r required at KEY DEPLOYMENT SITES
 deployment_needs = {
-    'B': 30,  # rescue stat site needs 30 units
-    'E': 20,  
-    'F': 25   
+    'B': {'units': 30, 'skills': ['medical'], 'equipment': ['first_aid_kit']},
+    'E': {'units': 20, 'skills': ['rescue'], 'equipment': ['life_jacket']},
+    'F': {'units': 25, 'skills': ['firefighting'], 'equipment': ['hose']}  
 }
 
-#  how many units ea SA can provide
+# how many units ea SA can provide
 staging_areas = {
-    'H': 50,  # main staging area
-    'I': 30   # 2nd staging area
+    'H': {'capacity': 70, 'skills': ['medical', 'rescue', 'firefighting'], 'equipment': ['first_aid_kit', 'life_jacket', 'hose']},
+    'I': {'capacity': 50, 'skills': ['medical', 'rescue'], 'equipment': ['first_aid_kit', 'life_jacket']}
 }
 
 # Add capacities as node attributes
@@ -71,12 +50,12 @@ nx.set_node_attributes(deployment_map, staging_areas, "capacity")
 
 # Define deployment routes and their capacities
 routes = {
-    ('H', 'B'): 25,  # main - rescue stat
-    ('H', 'E'): 15,  # main - boat rescue
-    ('H', 'F'): 20,  # main - emergency service
-    ('I', 'B'): 20,  # 2nd - to rescue stat
-    ('I', 'E'): 15,  # 2nd - boat rescue
-    ('I', 'F'): 15   # 2nd - emergency service
+    ('H', 'B'): 30,  # main - rescue stat
+    ('H', 'E'): 20,  # main - boat rescue
+    ('H', 'F'): 25,  # main - emergency service
+    ('I', 'B'): 30,  # 2nd - to rescue stat
+    ('I', 'E'): 20,  # 2nd - boat rescue
+    ('I', 'F'): 25   # 2nd - emergency service
 }
 
 # update capacities for deployment routes
@@ -89,7 +68,7 @@ deployment_details = {(u, v): 0 for u, v in deployment_map.edges()}
 #tracks num of units deployed 4 each edge
 
 # calc total available capacity from staging areas
-total_staging_capacity = sum(staging_areas.values())
+total_staging_capacity = sum(area['capacity'] for area in staging_areas.values())
 
 if deployment_map.has_edge('F', 'E'):
     deployment_map['F']['E']['type'] = 'Impassable'
@@ -126,24 +105,43 @@ def deploy_units():
     
     
     for site, needed in deployment_needs.items(): #for ea depl node, CHECK how many units needed
+        needed_units = needed['units']
+        required_skills = set(needed['skills'])
+        required_equipment = set(needed['equipment'])
+        
+        
         deployed = 0 #init counter 
         deployment_results[site] = {'total_deployed': 0, 'paths': []} #tracks units alrd deployed
         
+        # Calculate how many units should be deployed from each staging area
+        num_staging_areas = len(staging_areas)
+        units_per_staging_area = needed_units // num_staging_areas
+        remaining_units = needed_units
+        
         # deploying from each staging area
         for staging in staging_areas.keys():
-            if deployed >= needed: #ea SA : checks if req number of units have been deployed
+            if deployed >= needed_units: #ea SA : checks if req number of units have been deployed
                 break
             
+            if not (required_skills.issubset(staging_areas[staging]['skills']) and required_equipment.issubset(staging_areas[staging]['equipment'])):
+                continue
+            
+            # Determine how many units to deploy from this staging area
+            units_to_deploy = min(units_per_staging_area, remaining_units)
+
+            path = bfs_deployment(deployment_map, staging, site, units_to_deploy)
+            
             #calls fx bfs_deployment : to find a path from current SA to current deployment node   
-            path = bfs_deployment(deployment_map, staging, site, needed - deployed) #needed-deployed : deploy remaining needs #checks
+            path = bfs_deployment(deployment_map, staging, site, needed_units - deployed) #needed-deployed : deploy remaining needs #checks
+            
             
             if path:
                 # calc available capacity along the path
                 available_capacity = min(
                     min(deployment_map[u][v]['capacity'] - deployment_details.get((u, v), 0)
                         for u, v in zip(path[:-1], path[1:])),
-                    staging_areas[staging], #avail units in SA
-                    needed - deployed #remaining units needed at deploy node
+                    staging_areas[staging]['capacity'],
+                    units_to_deploy #remaining units needed at deploy node
                 )
                 
                 if available_capacity > 0:
@@ -160,9 +158,10 @@ def deploy_units():
                         'units': available_capacity
                     })
                     
-    
-                    staging_areas[staging] -= available_capacity 
+                    staging_areas[staging]['capacity'] -= available_capacity 
                     # update staging area capacity : reduced by num of units deployed alrd
+                    remaining_units -= available_capacity
+                    
     
     return deployment_results 
 
@@ -225,11 +224,15 @@ def visualize_deployment(graph, deployment_results, title="Emergency Services De
 print("\nDeployment Results:")
 for site, result in deployment_results.items():
     print(f"\nSite {site} ({node_attributes[site]}):")
-    print(f"Total units deployed: {result['total_deployed']}/{deployment_needs[site]}")
+    print(f"Total units deployed: {result['total_deployed']}/{deployment_needs[site]['units']}")
     print("Deployment paths:")
     for path_info in result['paths']:
         path_str = " -> ".join(path_info['path'])
         print(f"  {path_str}: {path_info['units']} units")
+        
+        # Check for insufficient deployment
+    if result['total_deployed'] < deployment_needs[site]['units']:
+        print(f"  Insufficient deployment for {site}. Needed: {deployment_needs[site]['units']}, Deployed: {result['total_deployed']}")
 
 
 visualize_deployment(deployment_map, deployment_results)
@@ -252,8 +255,3 @@ O(D * S * (2V +E)) = O(D * S * (V +E))
 - 2 ignore, Big O notation drop constants, doesnt care
 
 """
-
-
-
-
-

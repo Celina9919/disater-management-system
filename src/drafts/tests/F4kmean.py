@@ -7,6 +7,12 @@ Dijkstra's Algorithm → For distance calculations.
 GOAL : to minimize the average distance from all relief forces to the nearest 
 supply point and distribute relief forces evenly
 
+why not k-means :
+-K-Means doesn't work well with graphs because it can choose center points (centroids) that aren't 
+on the graph
+- could be located anywhere, even in places that don't exist or aren't connected by roads. 
+- This makes calculating distances to those points tricky
+
 """
 import pandas as pd
 import networkx as nx
