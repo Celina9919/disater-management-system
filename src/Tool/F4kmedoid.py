@@ -12,6 +12,9 @@ and improving the spots until find the best ones.
 -works directly with the nodes on the graph : ensuring that the center points (medoids) 
 are real, existing locations on our map. 
 
+total_cost : represents the sum of the shortest path distances 
+from all nodes in the graph to their assigned medoid (supply point)
+
 """
 
 import pandas as pd
