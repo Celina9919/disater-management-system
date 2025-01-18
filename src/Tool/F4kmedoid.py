@@ -94,16 +94,37 @@ def custom_dijkstra(graph, start, impassables, waterways): #djikstra to find sho
 
 ######2
 def initialize_medoids(nodes, k, existing_supply_point='G'): # initialize random Medoids
-    # Ensure that existing supply point (node G) is always selected as one medoid
-    if existing_supply_point:
-        medoids = [existing_supply_point]
-        # Randomly select remaining (k-1) medoids from the rest of the nodes
-        remaining_nodes = [node for node in nodes if node != existing_supply_point]
-        medoids += random.sample(remaining_nodes, k)
-    else:
-        # If no fixed node, select k random medoids from all nodes
-        medoids = random.sample(nodes, k)
-    return medoids
+    # ensure: existing supply point (node G) is always selected as one medoid
+    
+    best_medoids = None
+    best_cost = float('inf')    
+    
+    available_nodes = [node for node in nodes if node != existing_supply_point]   
+    #list :  nodes excluding fixed supply point (G)
+    
+    # try: every possible combination of 2 additional points (excl G) 
+    #considering : G fixed, k= 3
+    for i in range(len(available_nodes)):
+        for j in range(i + 1, len(available_nodes)):
+            
+            # create : a pair of medoids (as candidates)
+            # combining G w 2 selected nodes
+            current_medoids = [existing_supply_point, available_nodes[i], available_nodes[j]]
+            
+            # calc clusters for this combination
+            current_clusters = assign_clusters(G, current_medoids, obstacles, waterways)
+            
+            # calc total cost for this combination 
+            # calls fx 4
+            current_cost = calculate_total_cost(G, current_clusters, current_medoids, obstacles, waterways)
+            
+            # update best if : combination has lower cost
+            if current_cost < best_cost:
+                best_cost = current_cost
+                best_medoids = current_medoids
+    
+    print(f"Best initial medoids found with cost: {best_cost}")
+    return best_medoids
 
 ######3
 def assign_clusters(graph, medoids, impassables, waterways): ## assigns each node to the closest medoid using custom Dijkstra
@@ -124,89 +145,48 @@ def assign_clusters(graph, medoids, impassables, waterways): ## assigns each nod
     return clusters
 
 ######4
-def update_medoids(graph, clusters,impassables, waterways): # updates medoids by finding node with minimum total distance in each cluster
-    new_medoids = [] #init empty list to store UPDATED medoids
-    for medoid, nodes in clusters.items(): #for ea cluster
-        
-        cluster_nodes = [medoid] + nodes
-        #adds medoid itself to list of cluster nodes
-        
-        min_total_distance = float('inf')
-        #init variable : store minimum total distance for each cluster
-        
-        best_node = None
-        #init variable : store the best medoid
-        
-        for node in cluster_nodes:
-            distances = custom_dijkstra(graph, node, impassables, waterways)
-            #calc shortest paths from current node to all other nodes
-            
-            total_distance = sum(distances[other] for other in cluster_nodes if other != node)
-            #calc total distance from this node to all other nodes in the cluster
-            
-            if total_distance < min_total_distance:
-                min_total_distance = total_distance
-                
-                #if the current total_distance is < min_total_distance(previously calc in fx bfr), 
-                # update the minimum distance 
-                
-                best_node = node
-                
-        new_medoids.append(best_node)
-    return new_medoids
-
-
-######5
 def calculate_total_cost(graph, clusters, medoids, impassables, waterways): #fx calc sum of shortest distances of a clustering solution 
     total_cost = 0 #store total dist 
-    for medoid, cluster_nodes in clusters.items():
-        distances = custom_dijkstra(graph, medoid, impassables, waterways) #call fx1 : retrieve shortest dist from current medoid to other nodes
+    for medoid, cluster_nodes in clusters.items(): #iterates over each medoid n its assigned cluster
+        
+        distances = custom_dijkstra(graph, medoid, impassables, waterways) 
+        #call fx1 : retrieve shortest dist from current medoid to other nodes
+        
         total_cost += sum(distances[node] for node in cluster_nodes)
         #sum distances from medoid to its cluster nodes and adds to total_cost
+        
     return total_cost
 
-####6 : run K-Medoids iteratively
-def k_medoids(graph, k=2, max_iter=10, num_trials=5, obstacles=[], waterways=[], existing_supply_point="G"): #iterating 10 times, back from 1-4
-    #Try 5 different random starting points (num_trials=5)
-    
+####5 : run K-Medoids iteratively
+def k_medoids(graph, max_iter=10, obstacles=[], waterways=[], existing_supply_point="G"): #iterating 10 times, back from 1-4
     nodes = list(graph.nodes())
-    best_clusters = None
-    best_cost = float('inf') # keep track of which try gave us the lowest total distance
+    #retrieves all graph nodes
     
-    for trial in range(num_trials):  # do everything 5 times!
-        # try one random solution
-        
-        current_medoids = initialize_medoids(nodes, k, existing_supply_point)
-        current_clusters = None
-        current_cost = float('inf')
+    current_medoids = initialize_medoids(nodes, k=3, existing_supply_point=existing_supply_point)
+    #init medoids: call fx 2
     
-    for _ in range(max_iter):
-        new_clusters = assign_clusters(graph, current_medoids, obstacles, waterways) #CALLING fx 3: assign nodes to closest medoids
-        new_medoids = update_medoids(graph, new_clusters, obstacles, waterways) #CALLING fx 4: update medoids based on new clusters
-        new_cost = calculate_total_cost(graph, new_clusters, new_medoids, obstacles, waterways)
-        
-        if new_cost >= current_cost: #if cost not improving, stop
-            break
-            
-        current_medoids = new_medoids
-        current_clusters = new_clusters
-        current_cost = new_cost
-        
-        # if this try is better than our best so far, save it
-        if current_cost < best_cost:
-            best_cost = current_cost
-            best_clusters = current_clusters
-            
-    print(f"Best solution found with total cost: {best_cost}")
-    return best_clusters
+    #to store clusters, cost
+    current_clusters = None
+    current_cost = float('inf')
+    
+    print(f"Selected fixed medoids: {current_medoids}")
+    
+    # since we found best combination, we only need to run once to get final clusters
+    # assign clusters 
+    # calc their total cost for the initialized medoids
+    new_clusters = assign_clusters(graph, current_medoids, obstacles, waterways)
+    new_cost = calculate_total_cost(graph, new_clusters, current_medoids, obstacles, waterways)
+    
+    print(f"Final total cost: {new_cost}")
+    return new_clusters
 
 obstacles = [("F", "E")]  # F-E is impassable
 waterways = [("E", "I")]  # E-I is a waterway
 
 # apply K-Medoids Clustering
-clusters = k_medoids(G, k=2, num_trials=5, obstacles=obstacles, waterways=waterways)
+clusters = k_medoids(G, obstacles=obstacles, waterways=waterways)
 
-# Display the final medoids (selected supply points)
+# display the final medoids (selected supply points)
 final_medoids = list(clusters.keys())
 print(f"Selected Supply Points: {final_medoids}")
 
