@@ -248,7 +248,7 @@ for shelter, flows in shelter_flow_details.items():
 visualize_evacuation_flow(city_map, shelter_flow_details)
 
 """
-Output Explaination:
+Output Explanation:
 Shelter A: 150 people
 Shelter B: 130 people
 Shelter C: 200 people
