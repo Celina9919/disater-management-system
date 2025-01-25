@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0eee45e4-59fa-4554-9ff1-607783cb34a9" name="Changes" comment="F4 K Medoid" />
+    <list default="true" id="0eee45e4-59fa-4554-9ff1-607783cb34a9" name="Changes" comment="F4 Set G as fixed point and add 2 additional supply points">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Tool/tempCodeRunnerFile.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tool/tempCodeRunnerFile.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -43,17 +46,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/Programming Java/algodata",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Programming Java/algodata&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="algodata" />
@@ -208,7 +211,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737188893434</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="F4 Set G as fixed point and add 2 additional supply points">
+      <option name="closed" value="true" />
+      <created>1737189404677</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1737189404677</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -230,6 +241,7 @@
     <MESSAGE value="add manual Dijstra Algorithm function" />
     <MESSAGE value="try with F4 unsure if it is approriately implemented. Needs verifying" />
     <MESSAGE value="F4 K Medoid" />
-    <option name="LAST_COMMIT_MESSAGE" value="F4 K Medoid" />
+    <MESSAGE value="F4 Set G as fixed point and add 2 additional supply points" />
+    <option name="LAST_COMMIT_MESSAGE" value="F4 Set G as fixed point and add 2 additional supply points" />
   </component>
 </project>
