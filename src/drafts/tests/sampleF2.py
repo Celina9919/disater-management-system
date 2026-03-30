@@ -13,84 +13,52 @@ The Edmonds-Karp algorithm continues to find new paths to send more flow through
 
 import pandas as pd
 import networkx as nx
-import matplotlib.pyplot as plt
-
-file_path = 'src/Data/undirected_weighted_graph.txt'
-
-adjacency_matrix = pd.read_csv(file_path, delim_whitespace=True, index_col=0)
-
-G = nx.from_pandas_adjacency(adjacency_matrix, create_using=nx.Graph) #undirected
-
-# Convert the undirected graph to a directed graph for Edmonds-Karp algorithm
-city_map = nx.DiGraph()
-
-# Copy all nodes and edges to the directed graph
-for u, v, data in G.edges(data=True):
-    city_map.add_edge(u, v, capacity=data['weight'])  # Adding capacity as weight
-    city_map.add_edge(v, u, capacity=data['weight'])  # Reverse direction for undirected graph
-
 
 # Input data
-node_attributes = {
-    'A': "Hospital",
-    'B': "Rescue Station",
-    'C': "Government Building",
-    'D': "Evacuation Point",
-    'E': "Boat Rescue",
-    'F': "Emergency Service",
-    'G': "Supply Point",
-    'H': "Staging Area",
-    'I': "Staging Area"
+assembly_points = {
+    'A': 30,  # Example: Node A has 30 people to evacuate
+    'B': 20,  # Example: Node B has 20 people to evacuate
+    'C': 50   # Example: Node C has 50 people to evacuate
 }
-
-nx.set_node_attributes(city_map, node_attributes, "description")
-
-
 shelters = {
-    'A': 200,  # Hospital shelter 200 people
-    'B': 150,  # Rescue Station shelter 150 people
-    'C': 250,  # Government Building shelter 250 people
-    'H': 50,  # staging area shelter 50 people
-    'I': 50,  # staging area shelter 50 people
-
+    'X': 40,  # Example: Shelter X can accommodate 40 people
+    'Y': 60   # Example: Shelter Y can accommodate 60 people
 }
 
-evacuation_needs = {
-    'D': 300  #300 ppl need to ecavuate
-}
+# Create the graph with capacities
+city_map = nx.DiGraph()
 
-
-# add source
+# Add assembly points to the graph with edges to a source node
 city_map.add_node('Source')
-for point, people in evacuation_needs.items():
-    city_map.add_edge('Source', point, capacity=people)
+for point, capacity in assembly_points.items():
+    city_map.add_edge('Source', point, capacity=capacity)
 
-# add sink
+# Add shelters to the graph with edges from a sink node
 city_map.add_node('Sink')
 for shelter, capacity in shelters.items():
     city_map.add_edge(shelter, 'Sink', capacity=capacity)
 
+# Add intermediate routes with capacities
 routes = {
-    ('D', 'A'): 150,  # Example: Route from A to X can handle 25 people
-    ('D', 'B'): 130,  # Example: Route from A to Y can handle 15 people
-    ('D', 'C'): 200,  # Example: Route from B to X can handle 10 people
-    ('D', 'H'): 20,  # Example: Route from B to Y can handle 20 people
-    ('D', 'I'): 20,  # Example: Route from B to Y can handle 20 people
+    ('A', 'X'): 25,  # Example: Route from A to X can handle 25 people
+    ('A', 'Y'): 15,  # Example: Route from A to Y can handle 15 people
+    ('B', 'X'): 10,  # Example: Route from B to X can handle 10 people
+    ('B', 'Y'): 20,  # Example: Route from B to Y can handle 20 people
+    ('C', 'X'): 20,  # Example: Route from C to X can handle 20 people
+    ('C', 'Y'): 30   # Example: Route from C to Y can handle 30 people
 }
 for (start, end), capacity in routes.items():
     city_map.add_edge(start, end, capacity=capacity)
 
-# add waterway (optional) (additional capacity)
+# Add waterway routes (optional)
 waterway_routes = {
-    ('D', 'I'): 50  
+    ('C', 'X'): 10  # Example: Additional capacity over water from C to X
 }
 for (start, end), capacity in waterway_routes.items():
     city_map.add_edge(start, end, capacity=capacity)
 
 # Calculate the maximum flow
-flow_value, flow_dict = nx.maximum_flow(city_map, 'Source', 'Sink', flow_func=nx.algorithms.flow.edmonds_karp)
-#nx.maximum_flow() = built in networkx func
-# used to compute max flow btw source n sink
+flow_value, flow_dict = nx.maximum_flow(city_map, 'Source', 'Sink')
 
 # Output results
 print(f"Maximum Flow: {flow_value}")
@@ -100,78 +68,9 @@ for source, targets in flow_dict.items():
         if flow > 0:
             print(f"  {source} -> {target}: {flow}")
 
-    
-###saving to csv  
-def save_flow_to_csv(graph, flow_dict, filename="evacuation_flow.csv"):
-    data = []
-    for source, targets in flow_dict.items():
-        for target, flow in targets.items():
-            if flow > 0:  # Record only non-zero flows
-                capacity = graph[source][target].get('capacity', 0)
-                route_type = "Waterway" if (source, target) in waterway_routes else "Road"
-                data.append([source, target, flow, capacity, route_type])
-    df = pd.DataFrame(data, columns=['Source', 'Target', 'Flow', 'Capacity', 'Route Type'])
-    df.to_csv(filename, index=False)
-    print(f"Flow details saved to {filename}")
-    
-    save_flow_to_csv(city_map, flow_dict)
-    
-##### Visualization
-def visualize_evacuation_flow(graph, flow_dict, title="Evacuation Flow Visualization"):
-    pos = nx.spring_layout(graph, seed=42, k=3)  
-    plt.figure(figsize=(12, 8))
-
-    # Drawing nodes
-    nx.draw_networkx_nodes(graph, pos, node_size=700, node_color="lightblue")
-    
-    # Drawing edges (initially in gray, we'll update them)
-    edge_colors = []
-    for u, v, data in graph.edges(data=True):
-        flow = flow_dict[u][v] if u in flow_dict and v in flow_dict[u] else 0
-        if (u, v) in waterway_routes:  # Waterway routes in blue
-            edge_colors.append("blue")
-        else:
-            edge_colors.append("gray")  # Default roads in gray
-
-    nx.draw_networkx_edges(graph, pos, width=2, alpha=0.7, edge_color=edge_colors)
-    
-    # Prepare node labels with description
-    node_labels = {node: f"{node}: {data.get('description', 'No description')}" for node, data in graph.nodes(data=True)}
-    nx.draw_networkx_labels(graph, pos, labels=node_labels, font_size=10, font_color="black")
-
-    # Prepare edge labels (showing flow/capacity)
-    edge_labels = {}
-    for u, v, data in graph.edges(data=True):
-        flow = flow_dict[u][v] if u in flow_dict and v in flow_dict[u] else 0
-        capacity = data.get('capacity', 0)
-        edge_labels[(u, v)] = f"Flow: {flow}/{capacity}"  # Label with flow and capacity
-    
-    # Add edge labels (flow/capacity) in red color
-    nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels, font_color="red", font_size=8)
-
-    # Waterway labels (showing "Waterway" text above routes)
-    for u, v, data in graph.edges(data=True):
-        if (u, v) in waterway_routes:
-            # Text label for waterway routes
-            plt.text(pos[u][0], pos[u][1] + 0.05, "Waterway", fontsize=10, color="blue", ha="center", fontweight="bold")
-
-    # Title for the plot
-    plt.title(title, fontsize=14)
-    plt.axis("off")  # Hide axes for a cleaner plot
-    plt.show()
-
-
-visualize_evacuation_flow(city_map, flow_dict)
-    
 # Decision based on the flow
-total_demand = sum(evacuation_needs.values())
+total_demand = sum(assembly_points.values())
 if flow_value >= total_demand:
     print("The existing infrastructure is sufficient for evacuation.")
 else:
     print("Additional infrastructure is needed for evacuation.")
-    
-
-print(f"Maximum Flow: {flow_value}")
-    
-    
-    
