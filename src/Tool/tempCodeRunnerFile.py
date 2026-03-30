@@ -1,0 +1,1 @@
+For each neighbor of a node, the algorithm checks if a better path exists. Each edge is checked once. It takes O(E) time across the entire run.

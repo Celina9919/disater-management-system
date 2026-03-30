@@ -134,8 +134,14 @@ def deploy_units():
         deployment_results[site] = {'total_deployed': 0, 'paths': []} #tracks units alrd deployed
         
         # Calculate how many units should be deployed from each staging area
-        num_staging_areas = len(staging_areas)
-        units_per_staging_area = needed_units // num_staging_areas
+        # Only count qualifying staging areas (those with required skills and equipment)
+        qualifying_staging_areas = [
+            s for s in staging_areas
+            if required_skills.issubset(staging_areas[s]['skills'])
+            and required_equipment.issubset(staging_areas[s]['equipment'])
+        ]
+        num_qualifying = len(qualifying_staging_areas) if qualifying_staging_areas else 1
+        units_per_staging_area = needed_units // num_qualifying
         remaining_units = needed_units
         
         # deploying from each staging area
