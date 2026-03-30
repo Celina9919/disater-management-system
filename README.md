@@ -125,16 +125,6 @@ Remove an old or unnecessary branch:
 ---
 
 
-## **Understanding the Project**
-
-### Objective:
-To create a tool that helps city planners and emergency managers handle disasters efficiently by:
-1. Visualizing the city map.
-2. Simulating disaster scenarios (e.g., road closures, damaged areas).
-3. Planning essential actions (e.g., evacuations, routing emergency services).
-
----
-
 ### Key Features:
 The tool should:
 1. **Load and Display City Map (B1):**
@@ -153,36 +143,7 @@ The tool should:
 
 ---
 
-## **Project Structure**
-
-The project should be modular for ease of development and testing. Here's a suggested structure:
-
-### **1. Modules**
-- **Data Management (City Map):**
-  - Handles map input, storage, and modifications (B1, B2).
-  
-- **Disaster Planning Tools:**
-  - Provides algorithms for F1–F5 features.
-  
-
-### **2. Key Files and Directories**
-```
-/disaster_management_tool
-    |-- main.py              # Entry point for the tool
-    |-- data/
-    |     |-- city_map.txt   # Adjacency matrix for the city map
-    |-- modules/
-    |     |-- city_map.py    # Functions for B1 and B2
-    |     |-- planning.py    # Algorithms for F1–F5
-    |-- tests/
-    |     |-- test_city_map.py  # Tests for city_map.py
-    |     |-- test_planning.py  # Tests for planning.py
-    |-- requirements.txt     # List of dependencies (if any)
-    |-- README.md            # Project description and usage instructions
-```
-THIS IS SUGGESTED BY CHATGPT, COULD CHANGE LATER
-
-## **Step-by-Step Plan **
+## Step-by-Step Plan 
 
 ### **Step 1: Implement Basic Features (B1 and B2)**
 1. **B1: Load and Display City Map**
@@ -191,7 +152,7 @@ THIS IS SUGGESTED BY CHATGPT, COULD CHANGE LATER
 
 2. **B2: Modify City Map**
    - Add functionality to:
-     - Mark roads as closed by setting weights to `-1` (or a large value like `9999` for inaccessible).
+     - Mark roads as impassable,waterway w different colours
      - Highlight damaged areas.
 
 ---
@@ -201,21 +162,25 @@ Each feature involves specific algorithms:
 
 1. **F1: Rebuild Communication Infrastructure**
    - POSSIBLE SOLUTION : Use a graph traversal algorithm (DFS or BFS) to identify disconnected areas.
+   - Prim algo : MST
    
 
 2. **F2: Plan Evacuation Routes**
    - Use a shortest path algorithm (Dijkstra maybe)
-   - TAKE INTO ACCOUNT!!! --> Possible road closure(?)
+   - TAKE INTO ACCOUNT!!! --> Possible road closure(?), max flow
+
+   - Updated max flow : Edmond Karp similar to ford fulkerson
 
 3. **F3: Plan Routes for Emergency Services**
    - Similar to F2
-   - TAKE INTO ACCOUNT!!! --> time taken to respond??? like how much time needed for the rescue service to go and help.
+   - djikstra : shortest path to 2 stop nodes
 
 4. **F4: Set Up Supply Points**
-   - idk yet
+   - K-Medoid : divide nodes into clusters of supply points(medoid)
 
 5. **F5: Plan Deployment of Emergency Services**
-   - idk yet
+   - BFS 
+   - djikstra
 
 ---
 
@@ -224,7 +189,7 @@ Each feature involves specific algorithms:
 
 ---
 
-## **Implementation Plan**
+## **Milestone Plan**
 
 Timeline:
 1. **Week 1(5 Dec - 8 Dec) :**
